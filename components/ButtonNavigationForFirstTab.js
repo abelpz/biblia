@@ -2,7 +2,8 @@ import React from "react";
 import { View } from "react-native";
 import { Text, Card } from "react-native-paper";
 import ChevronIcon from "../assets/icons/flavorIcons/chevron(default).svg";
-import NoDef from "../assets/icons/flavorIcons/notdef-solid.svg";
+import { NoDefIcon } from "../assets/icons/flavorIcons/icons";
+ 
 import { Link } from "expo-router";
 export default function ButtonNavigationForFirstTab({
   Logo,
@@ -18,7 +19,7 @@ export default function ButtonNavigationForFirstTab({
               {Logo ? (
                 <Logo width={24} height={24} />
               ) : (
-                <NoDef width={24} height={24} />
+                <NoDefIcon width={24} height={24} />
               )}
               <Text variant="titleMedium">
                 {InnerText ? InnerText : "No Text"}
