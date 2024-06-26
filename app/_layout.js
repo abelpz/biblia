@@ -25,7 +25,7 @@ export default function RootLayout() {
                     style={{ width: 24, height: 24 }}
                   />
                   <Text style={{ marginLeft: 6 }} variant="titleLarge">
-                    Katesthio
+                  Sunalizo
                   </Text>
                 </View>
               ),

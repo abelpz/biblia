@@ -34,7 +34,6 @@ export default function App() {
       <ButtonNavigationForFirstTab />
       <Button onPress={()=> {
         styles.text.fontSize = 40
-        console.log(styles)
         }}>Plus 2</Button>
       <Text style={[styles.text, { fontWeight: 'normal' }]}>This is regular text</Text>
       <Text style={[styles.text, { fontWeight: 'bold' }]}>This is bold text</Text>
