@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { renderStyles as rs, ConvertCssToReactNativeStyle } from './renderStyles';
 import { StyleSheet } from 'react-native';
 import { Table, Cell, TableWrapper } from 'react-native-reanimated-table';
-
+import { Text } from 'react-native-paper';
 let convertedStyleSheet = ConvertCssToReactNativeStyle(rs);
 const styles = StyleSheet.create(convertedStyleSheet);
 
@@ -70,7 +70,7 @@ const renderers = {
         if(fontConfig && fontConfig.fontFamily!='default'){
             return (
                 <View style={{}}>
-                    <Text style={{ paddingTop: 6, fontFamily:fontConfig.fontFamily,fontSize:fontConfig.fontSize }}>
+                    <Text variant={fontConfig.fontSize} style={{ fontFamily:fontConfig.fontFamily }}>
                         {word}
                     </Text>
                 </View>
@@ -78,8 +78,8 @@ const renderers = {
         }
         return (
             <View style={{}}>
-                <Text style={{ paddingTop: 6,fontSize:fontConfig.fontSize  }}>
-                    {word}
+                <Text variant={fontConfig.fontSize}>
+                    {word}  
                 </Text>
             </View>
         )

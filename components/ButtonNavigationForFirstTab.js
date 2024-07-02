@@ -1,9 +1,8 @@
 import React from "react";
 import { View } from "react-native";
 import { Text, Card } from "react-native-paper";
-import ChevronIcon from "../assets/icons/flavorIcons/chevron(default).svg";
 import { NoDefIcon } from "../assets/icons/flavorIcons/icons";
- 
+ import { ArrowDownIcon } from "../assets/icons/flavorIcons/icons";
 import { Link } from "expo-router";
 export default function ButtonNavigationForFirstTab({
   Logo,
@@ -26,7 +25,7 @@ export default function ButtonNavigationForFirstTab({
               </Text>
             </View>
             <Card.Actions style={styles.cardAction}>
-              <ChevronIcon />
+              <ArrowDownIcon />
             </Card.Actions>
           </View>
         </Card.Content>

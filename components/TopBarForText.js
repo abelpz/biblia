@@ -3,7 +3,7 @@ import TopBarContainer from "./TopBarContainer";
 import Animated from "react-native-reanimated";
 import { Button } from "react-native-paper";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-
+import { IconButton, MD3Colors } from "react-native-paper";
 import {
   interpolateColor,
   useAnimatedStyle,
@@ -16,8 +16,15 @@ import {
   AddRessourcesIcon,
   ParamTextIcon,
 } from "../assets/icons/flavorIcons/icons";
+import DropDownSelect from "./DropDownSelect";
 
-export default function TopBarForText({ isOnTop, functionTitle,functionParamText,functionAddResources }) {
+export default function TopBarForText({
+  isOnTop,
+  functionTitle,
+  functionParamText,
+  functionAddResources,
+  setIsOnTop,
+}) {
   const progress = useDerivedValue(() => {
     return isOnTop ? withTiming(1) : withTiming(0);
   }, [isOnTop]);
@@ -32,42 +39,41 @@ export default function TopBarForText({ isOnTop, functionTitle,functionParamText
   });
 
   return (
-    <TopBarContainer>
-      <Animated.View
-        style={[
-          {
+    <Animated.View style={[{ height: "12%" }, HeaderStyle]}>
+      <TopBarContainer>
+        <View
+          style={{
             width: "100%",
             flexDirection: "row",
             gap: 4,
             paddingHorizontal: 4,
             paddingVertical: 8,
             alignItems: "center",
-          },
-          HeaderStyle,
-        ]}
-      >
-        <Button style={{ width: "20%" }}>
-          <View style={{ width: 24, height: 24 }} />
-        </Button>
-        <TouchableOpacity style={styles.customButton}>
-          <View style={styles.buttonInnerContent}>
-            <RessourcesIcon width={18} height={18} />
-            <Text style={styles.titleContainer}>Pain Sur Les Eaux</Text>
-            <ArrowDownIcon width={18} height={18} />
+          }}
+        >
+          <Button style={{ width: "20%" }}>
+            <View style={{ width: 24, height: 24 }} />
+          </Button>
+
+          <DropDownSelect/>
+          <View style={{ flexDirection: "row", width: "20%" }}>
+            <IconButton
+              style={{ margin: 8 }}
+              onPress={() => functionParamText}
+              icon={() => <ParamTextIcon width={24} height={24} />}
+              size={24}
+            />
+           <IconButton
+              style={{ margin: 8 }}
+              onPress={functionParamText}
+              icon={() => <AddRessourcesIcon width={24} height={24} />}
+              size={24}
+
+            />
           </View>
-        </TouchableOpacity>
-        <View style={{ flexDirection: "row", width: "20%" }}>
-          <TouchableOpacity 
-          onPress={functionParamText}
-          style={{ padding: 8 }}>
-            <ParamTextIcon width={24} height={24} />
-          </TouchableOpacity>
-          <TouchableOpacity style={{ margin: 8 }}>
-            <AddRessourcesIcon width={24} height={24} />
-          </TouchableOpacity>
         </View>
-      </Animated.View>
-    </TopBarContainer>
+      </TopBarContainer>
+    </Animated.View>
   );
 }
 

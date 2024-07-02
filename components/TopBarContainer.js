@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import { useState } from "react";
 
 export default function TopBarContainer({ children }) {
   return (
@@ -12,8 +13,8 @@ export default function TopBarContainer({ children }) {
 
 const styles = StyleSheet.create({
   container: {
-    height: "12%",
+    height: "100%",
   },
   phoneNotif: { height: "40%" },
-  headerContainer: { height: "60%" },
+  headerContainer: { height: 360 },
 });
