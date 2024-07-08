@@ -8,7 +8,7 @@ import {
 import { Text } from "react-native-paper";
 import { ProskommaContext } from "../context/proskommaContext";
 
-export default function DropDownSelect() {
+export default function DropDownSelectRessources() {
   const [value, setValue] = useState('xenizo_psle_1');
   const [isFocus, setIsFocus] = useState(false);
   const [data, setData] = useState([]);
@@ -21,7 +21,7 @@ export default function DropDownSelect() {
     }
 
     fetchData();
-  }, [pk]);
+  }, []);
 
   return (
     <Dropdown
@@ -52,7 +52,9 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   dropdown: {
-    width: "50%",
+    width: 200,
+    height:32,
+    
     borderWidth: 1,
     borderRadius: 9,
     borderColor: "#777680",

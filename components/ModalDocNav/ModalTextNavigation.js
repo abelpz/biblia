@@ -1,29 +1,31 @@
 import { Portal, Modal, Divider } from "react-native-paper";
 import { TouchableOpacity, View, StyleSheet, ScrollView } from "react-native";
 import { Text } from "react-native-paper";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect,useRef } from "react";
 import { ProskommaContext } from "../../context/proskommaContext";
 
 export default function ModalTextNavigation({
   documentResult,
+  currentBook,
   visible = false,
   setVisible,
+  setbookNav,
 }) {
+
   const { pk } = useContext(ProskommaContext);
-  const [book, setBook] = useState("TIT");
+  const [book, setBook] = useState(currentBook);
   const [chapter, setChapter] = useState(1);
   const [verse, setVerse] = useState(1);
   const [data, setData] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
-      const result = await getData(pk,'xenizo_psle_1');
+      const result = await getData(pk, "xenizo_psle_1");
       setData(result);
     }
 
     fetchData();
   }, [documentResult]);
-
 
   if (!visible) return null;
 
@@ -67,17 +69,30 @@ export default function ModalTextNavigation({
                 {data?.map((e, id) => (
                   <TouchableOpacity
                     style={
-                      book === e.headers.filter(p => p.key === 'bookCode')[0].value
-                        ? [{ backgroundColor: "rgba(199, 197, 208, 1)" }, styles.chipContainer]
+                      book ===
+                      e.headers.filter((p) => p.key === "bookCode")[0].value
+                        ? [
+                            { backgroundColor: "rgba(199, 197, 208, 1)" },
+                            styles.chipContainer,
+                          ]
                         : [styles.chipContainer]
                     }
-                    onPress={() => setBook(e.headers.filter(p => p.key === 'bookCode')[0].value)}
+                    onPress={() =>
+                      setBook(
+                        e.headers.filter((p) => p.key === "bookCode")[0].value
+                      )
+                    }
                     key={id}
                   >
-                    <Text 
-                    style={{color:'rgba(73, 69, 79, 1)'}}
-                    variant="labelMedium">{e.headers.filter(p => p.key === 'toc2')[0]?.value}</Text>
-                    <Text variant="bodyLarge">{e.headers.filter(p => p.key === 'bookCode')[0].value}</Text>
+                    <Text
+                      style={{ color: "rgba(73, 69, 79, 1)" }}
+                      variant="labelMedium"
+                    >
+                      {e.headers.filter((p) => p.key === "toc2")[0]?.value}
+                    </Text>
+                    <Text variant="bodyLarge">
+                      {e.headers.filter((p) => p.key === "bookCode")[0].value}
+                    </Text>
                   </TouchableOpacity>
                 ))}
               </ScrollView>
@@ -85,13 +100,21 @@ export default function ModalTextNavigation({
             <Divider style={styles.divider} />
             <View style={styles.column}>
               <ScrollView>
-                {data?.find((e) => e.headers.filter(p => p.key === 'bookCode')[0].value === book)
+                {data
+                  ?.find(
+                    (e) =>
+                      e.headers.filter((p) => p.key === "bookCode")[0].value ===
+                      book
+                  )
                   ?.cvIndexes.map((e, id) => (
                     <TouchableOpacity
                       onPress={() => setChapter(e.chapter)}
                       style={
                         chapter === e.chapter
-                          ? [{ backgroundColor: "rgba(199, 197, 208, 1)" }, styles.chipContainer]
+                          ? [
+                              { backgroundColor: "rgba(199, 197, 208, 1)" },
+                              styles.chipContainer,
+                            ]
                           : [styles.chipContainer]
                       }
                       key={id}
@@ -104,7 +127,12 @@ export default function ModalTextNavigation({
             <Divider style={styles.divider} />
             <View style={styles.column}>
               <ScrollView>
-                {data?.find((e) => e.headers.filter(p => p.key === 'bookCode')[0].value === book)
+                {data
+                  ?.find(
+                    (e) =>
+                      e.headers.filter((p) => p.key === "bookCode")[0].value ===
+                      book
+                  )
                   ?.cvIndexes.find((e) => e.chapter === chapter)
                   ?.verseRanges.map((e, id) => (
                     <TouchableOpacity
@@ -113,7 +141,11 @@ export default function ModalTextNavigation({
                           ? [{ backgroundColor: "grey" }, styles.chipContainer]
                           : [styles.chipContainer]
                       }
-                      onPress={() => setVerse(e.numbers[0])}
+                      onPress={() => {
+                        setVerse(e.numbers[0]);
+                        setbookNav(book, chapter, verse);
+                        setVisible(false);
+                      }}
                       key={id}
                     >
                       <Text variant="bodyLarge">{e.numbers[0]}</Text>
@@ -186,10 +218,9 @@ async function getData(pk, docSetid) {
         }
       }
     }
-  }`).data?.docSet?.documents
+  }`).data?.docSet?.documents;
 
-  console.log(documents?.map(e => e.headers.filter(p => p.key === 'toc2')))
+  console.log(documents?.map((e) => e.headers.filter((p) => p.key === "toc2")));
 
   return documents;
-};
-
+}

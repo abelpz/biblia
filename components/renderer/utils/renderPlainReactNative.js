@@ -30,6 +30,7 @@ function InlineElement(props) {
     return <Text>{props.linkText}</Text>;
   }
 }
+
 const renderers = {
   text: ({ word, idWord, workspace, fontConfig }) => {
     return <Text style={{}}>{word}</Text>;

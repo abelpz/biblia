@@ -13,8 +13,7 @@ export default function TopBarContainer({ children }) {
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
   },
-  phoneNotif: { height: "40%" },
-  headerContainer: { height: 360 },
+  phoneNotif: { height: 40 },
+  headerContainer: { height: 360,height:48},
 });

@@ -6,8 +6,10 @@ import {
   ArrowDownIcon,
   LoopIcon,
 } from "../assets/icons/flavorIcons/icons";
+import { useRef } from "react";
 import { Text } from "react-native-paper";
-export default function BottomBar({ setCurrentChap, currentChap,documentResult,setIsModalVisible }) {
+export default function BottomBar({currentBook, setCurrentChap, currentChap,documentResult,setIsModalVisible }) {
+
   return (
     <View style={styles.bottomContainer}>
       <View style={styles.InsideOfTheBottomBar}>
@@ -28,7 +30,7 @@ export default function BottomBar({ setCurrentChap, currentChap,documentResult,s
         onPress={() => setIsModalVisible(true)}
          style={styles.customButton}>
           <View style={styles.buttonInnerContent}>
-            <Text variant="labelLarge">Tit {currentChap}</Text>
+            <Text variant="labelLarge">{currentBook} {currentChap}</Text>
             <ArrowDownIcon width={18} height={18} />
           </View>
         </TouchableOpacity>

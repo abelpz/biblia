@@ -5,73 +5,89 @@ import { View, StyleSheet } from "react-native";
 import { I18nContext } from "../../context/i18nContext";
 import { useSharedValue } from "react-native-reanimated";
 import { useContext, useState } from "react";
+import DropDownSelectFont from "../DropDownSelectFont";
 
-export default function BottomSheetContent({setFontSize}) {
+export default function BottomSheetContent({ setFontSize,setFontFamily }) {
   const progress = useSharedValue(2);
   const min = useSharedValue(0);
   const max = useSharedValue(4);
-  const correspondanceTable = ['bodyMedium','bodyLarge','headlineSmall','headlineMedium','headlineLarge']
+  const correspondanceTable = [
+    0,
+    1,
+    2,
+    3,
+    4,
+  ];
   const { i18n } = useContext(I18nContext);
   const [checked, setChecked] = useState("format");
 
   return (
     <View style={styles.optionContentContainer}>
-      <View style={styles.optionContainer}>
+      <View style={[styles.optionContainer, { height: 24 }]}>
         <Text variant="titleMedium">{i18n.t("textOptionGreeting")}</Text>
       </View>
+      <View style={styles.optionContainer}>
+        <Text style={{ alignSelf: "center" }} variant="bodyLarge">
+          Police
+        </Text>
+        <DropDownSelectFont setFontFamily={setFontFamily}/>
+      </View>
+
       <View style={styles.optionContainerSlider}>
         <Text variant="bodyLarge">Taille</Text>
-        <Slider
-          theme={{
-            maximumTrackTintColor: "rgba(223, 224, 255, 1)",
-            minimumTrackTintColor: "rgba(223, 224, 255, 1)",
-          }}
-          onValueChange={e => setFontSize(correspondanceTable[e])}
-          renderMark={() => (
-            <View
-              style={{
-                height: 4,
-                width: 4,
-                borderRadius: 4,
-                backgroundColor: "rgba(84, 90, 146, 1)",
-              }}
-            />
-          )}
-          renderThumb={() => (
-            <View
-              style={{
-                backgroundColor: "white",
-                height: 32,
-                width: 20,
-                alignItems: "center",
-              }}
-            >
+        <View style={{width:234,marginHorizontal:16}}>
+          <Slider
+            theme={{
+              maximumTrackTintColor: "rgba(223, 224, 255, 1)",
+              minimumTrackTintColor: "rgba(223, 224, 255, 1)",
+            }}
+            onSlidingComplete={(e) => setFontSize(correspondanceTable[e])}
+            renderMark={() => (
               <View
                 style={{
-                  backgroundColor: "rgba(84, 90, 146, 1)",
-                  borderRadius: 3,
-                  height: 32,
+                  height: 4,
                   width: 4,
-                  justifyContent: "center",
+                  borderRadius: 4,
+                  backgroundColor: "rgba(84, 90, 146, 1)",
                 }}
               />
-            </View>
-          )}
-          progress={progress}
-          minimumValue={min}
-          maximumValue={max}
-          step={4}
-          containerStyle={styles.sliderContainer}
-          thumbWidth={12}
-          onHapticFeedback={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-          }}
-          hapticMode={HapticModeEnum.STEP}
-        />
+            )}
+            renderThumb={() => (
+              <View
+                style={{
+                  backgroundColor: "white",
+                  height: 32,
+                  width: 20,
+                  alignItems: "center",
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: "rgba(84, 90, 146, 1)",
+                    borderRadius: 3,
+                    height: 32,
+                    width: 4,
+                    justifyContent: "center",
+                  }}
+                />
+              </View>
+            )}
+            progress={progress}
+            minimumValue={min}
+            maximumValue={max}
+            step={4}
+            containerStyle={styles.sliderContainer}
+            thumbWidth={12}
+            onHapticFeedback={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+            }}
+            hapticMode={HapticModeEnum.STEP}
+          />
+        </View>
       </View>
       <View style={styles.optionContainer}>
         <Text variant="bodyLarge">{i18n.t("style")}</Text>
-        <View>
+        <View style={{marginHorizontal:16}}>
           <View style={styles.optionContainerRadioButtons}>
             <RadioButton
               value="format"
@@ -102,16 +118,18 @@ const styles = StyleSheet.create({
   },
   optionContainer: {
     gap: 12,
+    height: 44,
     flexDirection: "row",
   },
   optionContainerSlider: {
     gap: 24,
-
+    height: 44,
     flexDirection: "row",
     alignItems: "center",
     width: "90%",
   },
   optionContainerRadioButtons: {
+    marginTop:8,
     gap: 12,
     alignItems: "center",
     flexDirection: "row",

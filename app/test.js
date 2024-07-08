@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
+import React, { useEffect, useState, useContext, useMemo, useRef, useCallback } from "react";
 import {
   View,
   StyleSheet,
@@ -17,29 +17,42 @@ import { Text, PaperProvider } from "react-native-paper";
 import BottomSheetSearch from "../components/BottomSheets/BottomSheetSearch";
 import BottomBar from "../components/BottomBar";
 import ModalTextNavigation from "../components/ModalDocNav/ModalTextNavigation";
-export default function Test() {
-  const snapPoints = useMemo(() => ["30%"], []);
+
+const Test = () => {
+  const snapPoints = useMemo(() => [300], []);
   const { pk } = useContext(ProskommaContext);
   const bottomSheetRef = useRef(null);
   const [isOnTop, setIsOnTop] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentChap, setCurrentChap] = useState(1);
-  const [fontSize, setFontSize] = useState("headlineSmall");
+  const [fontSize, setFontSize] = useState(2);
   const [documentResult, setDocResults] = useState(null);
-
+  const [currentBook, setCurrentBook] = useState("TIT");
+  const [fontFamily, setFontFamily] = useState('Roboto');
+  
   useEffect(() => {
     async function fetchDocument() {
-      const result = await useDocumentQuery("TIT", "xenizo_psle_1", pk);
+      const result = await useDocumentQuery(currentBook, "xenizo_psle_1", pk);
       setDocResults(result);
     }
     fetchDocument();
-  }, [currentChap, fontSize]);
+  }, [currentBook]);
 
-  useEffect(() => {
-    if (bottomSheetRef.current) {
-      bottomSheetRef.current.close();
-    }
+
+  const handleBottomSheetOpen = useCallback(() => {
+    setIsBottomSheetOpen(true);
+    bottomSheetRef.current.snapToIndex(0);
+  }, []);
+
+  const handleBottomSheetClose = useCallback(() => {
+    setIsBottomSheetOpen(false);
+    bottomSheetRef.current.close();
+  }, []);
+
+  const handleModalTextNavigation = useCallback((book, chap, verse) => {
+    setCurrentBook(book);
+    setCurrentChap(chap);
   }, []);
 
   return (
@@ -47,10 +60,7 @@ export default function Test() {
       <PaperProvider>
         <TopBarForText
           isOnTop={isOnTop}
-          functionParamText={() => {
-            setIsBottomSheetOpen(true);
-            bottomSheetRef.current.snapToIndex(0);
-          }}
+          functionParamText={handleBottomSheetOpen}
         />
         <ReadingScreenAllBook
           setIsOnTop={setIsOnTop}
@@ -58,28 +68,25 @@ export default function Test() {
           pk={pk}
           fontSize={fontSize}
           currentChap={currentChap}
+          fontFamily={fontFamily}
         />
-
         <ModalTextNavigation
+          setbookNav={handleModalTextNavigation}
+          currentBook={currentBook}
           setVisible={setIsModalVisible}
           visible={isModalVisible}
           documentResult={documentResult}
         />
       </PaperProvider>
-
       <BottomBar
+        currentBook={currentBook}
         currentChap={currentChap}
         documentResult={documentResult}
         setCurrentChap={setCurrentChap}
         setIsModalVisible={setIsModalVisible}
       />
       {isBottomSheetOpen && (
-        <TouchableWithoutFeedback
-          onPress={() => {
-            setIsBottomSheetOpen(false);
-            bottomSheetRef.current.close();
-          }}
-        >
+        <TouchableWithoutFeedback onPress={handleBottomSheetClose}>
           <View style={styles.overlay} />
         </TouchableWithoutFeedback>
       )}
@@ -89,16 +96,18 @@ export default function Test() {
         snapPoints={snapPoints}
         enablePanDownToClose={true}
         enableContentPanningGesture={false}
-        onClose={() => setIsBottomSheetOpen(false)}
+        onClose={handleBottomSheetClose}
         enableHandlePanningGesture={true}
-        backgroundStyle={styles.bottomSheet} // Added style for BottomSheet
+        backgroundStyle={styles.bottomSheet}
       >
-        <BottomSheetSearch />
-        {/* <BottomSheetContent setFontSize={setFontSize} /> */}
+        <BottomSheetContent 
+          setFontFamily={setFontFamily}
+          setFontSize={setFontSize}
+        />
       </BottomSheet>
     </GestureHandlerRootView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   overlay: {
@@ -113,6 +122,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   bottomSheet: {
-    marginHorizontal: 16,
+    marginHorizontal: 0,
   },
 });
+
+export default React.memo(Test);

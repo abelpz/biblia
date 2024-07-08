@@ -4,6 +4,7 @@ import Animated from "react-native-reanimated";
 import { Button } from "react-native-paper";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { IconButton, MD3Colors } from "react-native-paper";
+const colors = require("../assets/colors.json")
 import {
   interpolateColor,
   useAnimatedStyle,
@@ -16,7 +17,7 @@ import {
   AddRessourcesIcon,
   ParamTextIcon,
 } from "../assets/icons/flavorIcons/icons";
-import DropDownSelect from "./DropDownSelect";
+import DropDownSelectRessources from "./DropDownSelectRessources";
 
 export default function TopBarForText({
   isOnTop,
@@ -33,19 +34,20 @@ export default function TopBarForText({
     const backgroundColor = interpolateColor(
       progress.value,
       [0, 1],
-      ["white", "red"]
+      ["white", colors.schemes.light.surfaceContainer]
     );
     return { backgroundColor };
   });
 
   return (
-    <Animated.View style={[{ height: "12%" }, HeaderStyle]}>
+    <Animated.View style={[HeaderStyle]}>
       <TopBarContainer>
         <View
           style={{
             width: "100%",
             flexDirection: "row",
             gap: 4,
+            height:48,
             paddingHorizontal: 4,
             paddingVertical: 8,
             alignItems: "center",
@@ -55,11 +57,11 @@ export default function TopBarForText({
             <View style={{ width: 24, height: 24 }} />
           </Button>
 
-          <DropDownSelect/>
+          <DropDownSelectRessources/>
           <View style={{ flexDirection: "row", width: "20%" }}>
             <IconButton
               style={{ margin: 8 }}
-              onPress={() => functionParamText}
+              onPress={() => functionParamText()}
               icon={() => <ParamTextIcon width={24} height={24} />}
               size={24}
             />
