@@ -447,7 +447,6 @@ function ConvertCssToReactNativeStyleOnFloor(styleSheet, index,fontFamily=null) 
     let font = `${fontFamily}`
     let values = Object.values(copyStyleSheet)
     if(values.includes('bold') && values.includes('italic')){
-        console.log(copyStyleSheet)
         font = font+"-BoldItalic"
         copyStyleSheet['fontFamily'] = font
         delete copyStyleSheet['fontWeight']

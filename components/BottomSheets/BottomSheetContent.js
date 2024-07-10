@@ -7,7 +7,7 @@ import { useSharedValue } from "react-native-reanimated";
 import { useContext, useState } from "react";
 import DropDownSelectFont from "../DropDownSelectFont";
 
-export default function BottomSheetContent({ setFontSize,setFontFamily }) {
+export default function BottomSheetContent({ setFontSize,setFontFamily, setBibleFormat,bibleFormat}){
   const progress = useSharedValue(2);
   const min = useSharedValue(0);
   const max = useSharedValue(4);
@@ -19,7 +19,6 @@ export default function BottomSheetContent({ setFontSize,setFontFamily }) {
     4,
   ];
   const { i18n } = useContext(I18nContext);
-  const [checked, setChecked] = useState("format");
 
   return (
     <View style={styles.optionContentContainer}>
@@ -91,16 +90,16 @@ export default function BottomSheetContent({ setFontSize,setFontFamily }) {
           <View style={styles.optionContainerRadioButtons}>
             <RadioButton
               value="format"
-              status={checked === "format" ? "checked" : "unchecked"}
-              onPress={() => setChecked("format")}
+              status={bibleFormat === "format" ? "checked" : "unchecked"}
+              onPress={() => setBibleFormat("format")}
             />
             <Text variant="bodyLarge">{i18n.t("formatBible")}</Text>
           </View>
           <View style={styles.optionContainerRadioButtons}>
             <RadioButton
               value="byVerse"
-              status={checked === "byVerse" ? "checked" : "unchecked"}
-              onPress={() => setChecked("byVerse")}
+              status={bibleFormat === "byVerse" ? "checked" : "unchecked"}
+              onPress={() => setBibleFormat("byVerse")}
             />
             <Text variant="bodyLarge">{i18n.t("formatBibleVerse")}</Text>
           </View>

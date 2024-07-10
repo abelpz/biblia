@@ -13,7 +13,6 @@ function getStyles(type, subType, indexForStyle,fontFamily=null) {
     throw new Error(`Unknown style type '${type}'`);
   }
   if (!rs[type][subType]) {
-    // console.log(`No styles for ${type}/${subType}`);
     return ConvertCssToReactNativeStyleOnFloor(rs[type].default, 0);
   }
   if (indexForStyle) {

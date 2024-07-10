@@ -1,4 +1,12 @@
-import React, { useEffect, useState, useContext, useMemo, useRef, useCallback } from "react";
+import React, {
+  useEffect,
+  useState,
+  useContext,
+  useMemo,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import {
   View,
   StyleSheet,
@@ -17,6 +25,7 @@ import { Text, PaperProvider } from "react-native-paper";
 import BottomSheetSearch from "../components/BottomSheets/BottomSheetSearch";
 import BottomBar from "../components/BottomBar";
 import ModalTextNavigation from "../components/ModalDocNav/ModalTextNavigation";
+import { Button } from "react-native-paper";
 
 const Test = () => {
   const snapPoints = useMemo(() => [300], []);
@@ -28,17 +37,17 @@ const Test = () => {
   const [currentChap, setCurrentChap] = useState(1);
   const [fontSize, setFontSize] = useState(2);
   const [documentResult, setDocResults] = useState(null);
-  const [currentBook, setCurrentBook] = useState("TIT");
-  const [fontFamily, setFontFamily] = useState('Roboto');
-  
+  const [currentBook, setCurrentBook] = useState("PHP");
+  const [fontFamily, setFontFamily] = useState("Roboto");
+  const [bibleFormat, setBibleFormat] = useState("format");
+  const [docSetId, setDocSetId] = useState("xenizo_psle_1");
   useEffect(() => {
-    async function fetchDocument() {
-      const result = await useDocumentQuery(currentBook, "xenizo_psle_1", pk);
-      setDocResults(result);
-    }
+    const fetchDocument = async () => {
+      const result = await useDocumentQuery(currentBook, docSetId, pk);
+      setDocResults(result.data.document.id);
+    };
     fetchDocument();
-  }, [currentBook]);
-
+  }, [currentBook, docSetId]);
 
   const handleBottomSheetOpen = useCallback(() => {
     setIsBottomSheetOpen(true);
@@ -60,8 +69,10 @@ const Test = () => {
       <PaperProvider>
         <TopBarForText
           isOnTop={isOnTop}
+          functionTitle={setDocSetId}
           functionParamText={handleBottomSheetOpen}
         />
+
         <ReadingScreenAllBook
           setIsOnTop={setIsOnTop}
           documentResult={documentResult}
@@ -69,6 +80,7 @@ const Test = () => {
           fontSize={fontSize}
           currentChap={currentChap}
           fontFamily={fontFamily}
+          bibleFormat={bibleFormat}
         />
         <ModalTextNavigation
           setbookNav={handleModalTextNavigation}
@@ -100,9 +112,11 @@ const Test = () => {
         enableHandlePanningGesture={true}
         backgroundStyle={styles.bottomSheet}
       >
-        <BottomSheetContent 
+        <BottomSheetContent
           setFontFamily={setFontFamily}
           setFontSize={setFontSize}
+          setBibleFormat={setBibleFormat}
+          bibleFormat={bibleFormat}
         />
       </BottomSheet>
     </GestureHandlerRootView>

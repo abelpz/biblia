@@ -48,7 +48,7 @@ export default function BottomBar({currentBook, setCurrentChap, currentChap,docu
           <ArrowRightGreyIcon style={{ margin: 8 }} width={24} height={24} />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           padding: 16,
           borderRadius: 16,
@@ -56,7 +56,7 @@ export default function BottomBar({currentBook, setCurrentChap, currentChap,docu
         }}
       >
         <LoopIcon width={24} height={24} />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 }

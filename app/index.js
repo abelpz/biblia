@@ -49,6 +49,7 @@ export default function App() {
   if (!fontsLoaded) {
     return <View></View>;
   }
+    // eas build -p android --profile preview
 
 
 

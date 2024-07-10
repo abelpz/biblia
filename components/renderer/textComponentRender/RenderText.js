@@ -1,11 +1,9 @@
-import { ScrollView } from "react-native";
-import { renderers } from "../utils/renderReactNative";
+import React, { useState, useEffect } from "react";
+import { ScrollView, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 import { SofriaRenderFromProskomma } from "proskomma-json-tools";
 import sofria2WebActions from "../utils/sofria2WebActions";
-import verseByVerseActions from "../utils/verseByVerseActions";
-import { ActivityIndicator, Text } from "react-native-paper";
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View } from "react-native";
+import { renderers } from "../utils/renderReactNative";
 
 export function ReadingScreenAllBook({
   currentChap,
@@ -14,9 +12,11 @@ export function ReadingScreenAllBook({
   fontSize,
   fontFamily,
   documentResult,
+  bibleFormat,
 }) {
-  const [chapterBuffer, setChapterBuffer] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [chapterBuffer, setChapterBuffer] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [option, setOption] = useState({
     showWordAtts: false,
     showTitles: true,
@@ -30,7 +30,7 @@ export function ReadingScreenAllBook({
     showChapterLabels: true,
     selectedBcvNotes: [1],
     chapters: [`${currentChap}`],
-    byVerse:true,
+    byVerse: bibleFormat === "byVerse",
     bcvNotesCallback: (bcv) => {},
     fontConfig: {
       fontFamily: fontFamily,
@@ -39,30 +39,37 @@ export function ReadingScreenAllBook({
     renderers,
   });
 
-
-
   useEffect(() => {
     setOption((prev) => ({
       ...prev,
       chapters: [`${currentChap}`],
+      byVerse: bibleFormat === "byVerse",
       fontConfig: {
         fontFamily: fontFamily,
         fontSize: fontSize,
       },
     }));
-  }, [currentChap, fontSize, fontFamily]);
+  }, [currentChap, fontSize, fontFamily, bibleFormat]);
+
+  useEffect(() => {
+    setIsLoading(true);
+  }, [documentResult, option]);
 
   useEffect(() => {
     if (documentResult) {
-      setIsLoading(true);
       const timeoutId = setTimeout(() => {
-        setChapterBuffer(renderDoc(documentResult, pk, option).paras);
-        setIsLoading(false);
+        try {
+          const result = renderDoc(documentResult, pk, option);
+          setChapterBuffer(result.paras);
+        } catch (error) {}
       }, 0);
-
       return () => clearTimeout(timeoutId);
     }
-  }, [documentResult, option]);
+  }, [documentResult,option]);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [chapterBuffer]);
 
   return isLoading ? (
     <View
@@ -101,17 +108,17 @@ export function renderDoc(documentResult, pk, option) {
 
     try {
       renderer.renderDocument1({
-        docId: documentResult.data.document.id,
+        docId: documentResult,
         config,
         output,
         workspace,
         context,
       });
     } catch (err) {
+      console.error("Renderer error:", err);
       throw err;
     }
   }
-
   return output;
 }
 
@@ -174,46 +181,3 @@ function BibleSelection({ pk, setBibleName, bible, setBible, setVisible }) {
   );
 }
 export { BibleSelection };
-
-
-export function renderDocForSideBySide(documentResult, pk, livre, bible, textNumber) {
-  let output = {};
-  let workspace = { textRef: `${bible}_${livre}_$${textNumber}`, textNumber: textNumber };
-  let context = {};
-  let config = {
-      showWordAtts: false,
-      showTitles: true,
-      showHeadings: true,
-      showIntroductions: true,
-      showFootnotes: true,
-      showXrefs: true,
-      showParaStyles: true,
-      showCharacterMarkup: true,
-      showVersesLabels: true,
-      
-      excludeScopeTypes: ["milestone", "attribute", "spanWithAtts"],
-      showChapterLabels: true,
-  }
-  if (documentResult) {
-      const renderer = new SofriaRenderFromProskomma({
-          proskomma: pk,
-          actions: actions,
-      });
-      try {
-          renderer.renderDocument1({
-              docId: documentResult.data.document.id,
-              config,
-              output,
-              workspace,
-              context,
-          });
-
-      } catch (err) {
-          console.log("Renderer", err);
-          throw err;
-      }
-  }
-
-  return output;
-}
-

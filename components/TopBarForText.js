@@ -57,7 +57,7 @@ export default function TopBarForText({
             <View style={{ width: 24, height: 24 }} />
           </Button>
 
-          <DropDownSelectRessources/>
+          <DropDownSelectRessources setDocSetId={functionTitle} />
           <View style={{ flexDirection: "row", width: "20%" }}>
             <IconButton
               style={{ margin: 8 }}
@@ -65,13 +65,13 @@ export default function TopBarForText({
               icon={() => <ParamTextIcon width={24} height={24} />}
               size={24}
             />
-           <IconButton
+           {/* <IconButton
               style={{ margin: 8 }}
               onPress={functionParamText}
               icon={() => <AddRessourcesIcon width={24} height={24} />}
               size={24}
 
-            />
+            /> */}
           </View>
         </View>
       </TopBarContainer>

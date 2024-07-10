@@ -3,7 +3,7 @@
     "name": "Sunalizo",
     "slug": "Sunalizo",
     "scheme": "Sunalizo",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
@@ -18,8 +18,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icons/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#00000"
+      },
+      "package": "com.gabrielaillet3.Sunalizo"
     },
     "web": {
       "favicon": "./assets/icons/favicon.png"
@@ -27,6 +28,14 @@
     "plugins": [
       "expo-router",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "15c0d2cc-8d5d-455a-ab50-abed6fc12941"
+      }
+    }
   }
 }

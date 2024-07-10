@@ -8,8 +8,7 @@ import {
 import { Text } from "react-native-paper";
 import { ProskommaContext } from "../context/proskommaContext";
 
-export default function DropDownSelectRessources() {
-  const [value, setValue] = useState('xenizo_psle_1');
+export default function DropDownSelectRessources({setDocSetId}) {
   const [isFocus, setIsFocus] = useState(false);
   const [data, setData] = useState([]);
   const { pk } = useContext(ProskommaContext);
@@ -27,17 +26,17 @@ export default function DropDownSelectRessources() {
     <Dropdown
       style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
       placeholderStyle={styles.placeholderStyle}
-      itemContainerStyle={styles.placeholderStyle}
+      itemContainerStyle={styles.placeholderStysetDocSetIdle}
       selectedTextStyle={styles.placeholderStyle}
       data={data}
       maxHeight={300}
       labelField="label"
       valueField="value"
-      value={value}
+      value={''}
       onFocus={() => setIsFocus(true)}
       onBlur={() => setIsFocus(false)}
       onChange={(item) => {
-        setValue(item.value);
+        setDocSetId(item.value);
         setIsFocus(false);
       }}
       renderLeftIcon={() => <RessourcesIcon width={18} height={18} />}
