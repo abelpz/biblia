@@ -1,40 +1,22 @@
 {
   "expo": {
     "name": "Sunalizo",
-    "slug": "Sunalizo",
-    "scheme": "Sunalizo",
-    "version": "0.0.1",
-    "orientation": "portrait",
-    "icon": "./assets/icons/icon.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/icons/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "rgba(84, 90, 146, 1)"
-    },
+    "slug": "k2",
+    "owner": "xenizo",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.xenizo.sunalizo"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icons/adaptive-icon.png",
-        "backgroundColor": "#00000"
-      },
-      "package": "com.gabrielaillet3.Sunalizo"
+      "package": "com.xenizo.sunalizo"
     },
-    "web": {
-      "favicon": "./assets/icons/favicon.png"
-    },
-    "plugins": [
-      "expo-router",
-      "expo-font"
-    ],
     "extra": {
-      "router": {
-        "origin": false
-      },
       "eas": {
-        "projectId": "15c0d2cc-8d5d-455a-ab50-abed6fc12941"
+        "projectId": "3fdc3cf5-eacb-4cfb-8c75-364205249ba2"
       }
     }
   }

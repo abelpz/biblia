@@ -4,7 +4,7 @@ import Animated from "react-native-reanimated";
 import { Button } from "react-native-paper";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { IconButton, MD3Colors } from "react-native-paper";
-const colors = require("../assets/colors.json")
+
 import {
   interpolateColor,
   useAnimatedStyle,
@@ -18,6 +18,7 @@ import {
   ParamTextIcon,
 } from "../assets/icons/flavorIcons/icons";
 import DropDownSelectRessources from "./DropDownSelectRessources";
+import { ColorThemeContext } from "../context/colorThemeContext";
 
 export default function TopBarForText({
   isOnTop,
@@ -26,15 +27,44 @@ export default function TopBarForText({
   functionAddResources,
   setIsOnTop,
 }) {
+  const { colors, theme } = useContext(ColorThemeContext);
   const progress = useDerivedValue(() => {
     return isOnTop ? withTiming(1) : withTiming(0);
   }, [isOnTop]);
+
+  const styles = StyleSheet.create({
+    titleContainer: {
+      paddingLeft: 8,
+      paddingRight: 8,
+      textAlign: "center",
+    },
+
+    customButton: {
+      width: "50%",
+      borderWidth: 1,
+      borderRadius: 9,
+      borderColor: colors.schemes[theme].outline,
+      borderStyle: "solid",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "row",
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+    },
+
+    buttonInnerContent: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      width: "100%",
+    },
+  });
 
   const HeaderStyle = useAnimatedStyle(() => {
     const backgroundColor = interpolateColor(
       progress.value,
       [0, 1],
-      ["white", colors.schemes.light.surfaceContainer]
+      [colors.schemes[theme].surface, colors.schemes[theme].surfaceContainer]
     );
     return { backgroundColor };
   });
@@ -44,65 +74,61 @@ export default function TopBarForText({
       <TopBarContainer>
         <View
           style={{
-            width: "100%",
+            width: "50%",
             flexDirection: "row",
             gap: 4,
-            height:48,
+            height: 48,
             paddingHorizontal: 4,
             paddingVertical: 8,
             alignItems: "center",
           }}
         >
-          <Button style={{ width: "20%" }}>
-            <View style={{ width: 24, height: 24 }} />
-          </Button>
+          <View style={{ height: 48, width: 48 }}></View>
 
           <DropDownSelectRessources setDocSetId={functionTitle} />
-          <View style={{ flexDirection: "row", width: "20%" }}>
-            <IconButton
-              style={{ margin: 8 }}
-              onPress={() => functionParamText()}
-              icon={() => <ParamTextIcon width={24} height={24} />}
-              size={24}
-            />
-           {/* <IconButton
-              style={{ margin: 8 }}
-              onPress={functionParamText}
-              icon={() => <AddRessourcesIcon width={24} height={24} />}
-              size={24}
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 0,
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={{
+                height: 48,
+                height: 48,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <IconButton
+                size={48}
+                style={{margin:0}}
+                onPress={() => functionParamText()}
+                icon={() => <ParamTextIcon/>}
+              />
+            </View>
 
-            /> */}
+            {/* <View style={{ height: 48, width: 48 }}></View> */}
+            <View
+              style={{
+                height: 48,
+                height: 48,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <IconButton
+              style={{ margin: 0 }}
+              onPress={functionParamText}
+              icon={() => <AddRessourcesIcon/>}
+              size={48}
+            />
+            </View>
+          
           </View>
         </View>
       </TopBarContainer>
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    paddingLeft: 8,
-    paddingRight: 8,
-    textAlign: "center",
-  },
-
-  customButton: {
-    width: "50%",
-    borderWidth: 1,
-    borderRadius: 9,
-    borderColor: "#777680",
-    borderStyle: "solid",
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-  },
-
-  buttonInnerContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
-  },
-});

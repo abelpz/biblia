@@ -3,11 +3,13 @@ import { View, Image } from "react-native";
 import { Text } from "react-native-paper";
 import { ProskommaProvider } from "../context/proskommaContext";
 import { I18nProvider } from "../context/i18nContext";
-
+import { ColorThemeProvider } from "../context/colorThemeContext";
 export default function RootLayout() {
   return (
     <I18nProvider>
       <ProskommaProvider>
+      <ColorThemeProvider>
+
         <Stack>
           <Stack.Screen
             options={{
@@ -39,6 +41,8 @@ export default function RootLayout() {
             name="test"
           />
         </Stack>
+        </ColorThemeProvider>
+
       </ProskommaProvider>
     </I18nProvider>
   );

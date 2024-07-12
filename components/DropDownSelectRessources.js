@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef, useLayoutEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import {
@@ -8,36 +8,32 @@ import {
 import { Text } from "react-native-paper";
 import { ProskommaContext } from "../context/proskommaContext";
 
-export default function DropDownSelectRessources({setDocSetId}) {
+export default function DropDownSelectRessources({ setDocSetId, docSetId }) {
   const [isFocus, setIsFocus] = useState(false);
-  const [data, setData] = useState([]);
+  const [inComponentValue, setInComponentValue] = useState(null);
   const { pk } = useContext(ProskommaContext);
+  const data = useRef(createDataArray(pk));
 
-  useEffect(() => {
-    async function fetchData() {
-      const result = await createDataArray(pk);
-      setData(result);
+  useLayoutEffect(() => {
+    if (inComponentValue) {
+      setDocSetId(inComponentValue);
     }
-
-    fetchData();
-  }, []);
-
+  }, [inComponentValue]);
   return (
     <Dropdown
       style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
       placeholderStyle={styles.placeholderStyle}
       itemContainerStyle={styles.placeholderStysetDocSetIdle}
       selectedTextStyle={styles.placeholderStyle}
-      data={data}
-      maxHeight={300}
+      data={data.current}
       labelField="label"
       valueField="value"
-      value={''}
+      value={data.current[0]}
       onFocus={() => setIsFocus(true)}
       onBlur={() => setIsFocus(false)}
       onChange={(item) => {
-        setDocSetId(item.value);
         setIsFocus(false);
+        setInComponentValue(item.value);
       }}
       renderLeftIcon={() => <RessourcesIcon width={18} height={18} />}
       renderRightIcon={() => <ArrowDownIcon width={18} height={18} />}
@@ -51,9 +47,9 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   dropdown: {
-    width: 200,
-    height:32,
-    
+    height: 32,
+    minWidth: 200,
+    alignSelf: "stretch",
     borderWidth: 1,
     borderRadius: 9,
     borderColor: "#777680",
@@ -61,7 +57,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    paddingVertical: 6,
     paddingHorizontal: 12,
   },
   icon: {
@@ -79,7 +74,11 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     paddingLeft: 8,
     paddingRight: 8,
-    textAlign: "center",
+    paddingVertical: 4,
+    wrap: "nowrap",
+
+    ellipsizeMode: "head",
+    numberOfLines: 1,
   },
   selectedTextStyle: {
     fontSize: 16,
@@ -90,9 +89,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-async function createDataArray(pk) {
-  const response = await pk.gqlQuerySync(`
+function createDataArray(pk) {
+  const response = pk.gqlQuerySync(`
     {
       docSets {
         tags
@@ -101,5 +99,8 @@ async function createDataArray(pk) {
     }
   `);
 
-  return response.data.docSets.map((e) => ({ label: e.tags[0].split(":")[1], value: e.id }));
+  return response.data.docSets.map((e) => ({
+    label: e.tags[0].split(":")[1],
+    value: e.id,
+  }));
 }

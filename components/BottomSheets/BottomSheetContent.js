@@ -1,24 +1,65 @@
 import { Slider, HapticModeEnum } from "react-native-awesome-slider";
 import { Text, RadioButton } from "react-native-paper";
 import * as Haptics from "expo-haptics";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { I18nContext } from "../../context/i18nContext";
 import { useSharedValue } from "react-native-reanimated";
 import { useContext, useState } from "react";
 import DropDownSelectFont from "../DropDownSelectFont";
+import { ColorThemeContext } from "../../context/colorThemeContext";
 
-export default function BottomSheetContent({ setFontSize,setFontFamily, setBibleFormat,bibleFormat}){
+export default function BottomSheetContent({
+  setFontSize,
+  setFontFamily,
+  setBibleFormat,
+  bibleFormat,
+}) {
   const progress = useSharedValue(2);
   const min = useSharedValue(0);
   const max = useSharedValue(4);
-  const correspondanceTable = [
-    0,
-    1,
-    2,
-    3,
-    4,
-  ];
+  const correspondanceTable = [0, 1, 2, 3, 4];
+  const { colors, theme } = useContext(ColorThemeContext);
   const { i18n } = useContext(I18nContext);
+
+  const styles = StyleSheet.create({
+    optionContentContainer: {
+      width: "100%",
+      paddingHorizontal: 16,
+      gap: 12,
+    },
+    optionContainer: {
+      gap: 12,
+      height: 44,
+      flexDirection: "row",
+    },
+    optionContainerSlider: {
+      gap: 12,
+      height: 44,
+      flexDirection: "row",
+      alignItems: "center",
+      width: "90%",
+    },
+    optionContainerRadioButtons: {
+      paddingHorizontal: 16,
+      gap: 12,
+      width: 234,
+      alignItems: "center",
+      flexDirection: "row",
+    },
+    sliderContainer: {
+      backgroundColor: colors.schemes[theme].primaryContainer,
+      height: 16,
+      width: "105%",
+      borderRadius: 24,
+    },
+    stepMarker: {
+      width: 4,
+      height: 4,
+      borderRadius: 30,
+      marginTop: 7,
+      backgroundColor: "rgba(84, 90, 146, 1)",
+    },
+  });
 
   return (
     <View style={styles.optionContentContainer}>
@@ -29,12 +70,12 @@ export default function BottomSheetContent({ setFontSize,setFontFamily, setBible
         <Text style={{ alignSelf: "center" }} variant="bodyLarge">
           Police
         </Text>
-        <DropDownSelectFont setFontFamily={setFontFamily}/>
+        <DropDownSelectFont setFontFamily={setFontFamily} />
       </View>
 
       <View style={styles.optionContainerSlider}>
         <Text variant="bodyLarge">Taille</Text>
-        <View style={{width:234,marginHorizontal:16}}>
+        <View style={{ width: 234, marginHorizontal: 16 }}>
           <Slider
             theme={{
               maximumTrackTintColor: "rgba(223, 224, 255, 1)",
@@ -47,7 +88,7 @@ export default function BottomSheetContent({ setFontSize,setFontFamily, setBible
                   height: 4,
                   width: 4,
                   borderRadius: 4,
-                  backgroundColor: "rgba(84, 90, 146, 1)",
+                  backgroundColor: colors.schemes[theme].primary,
                 }}
               />
             )}
@@ -62,7 +103,7 @@ export default function BottomSheetContent({ setFontSize,setFontFamily, setBible
               >
                 <View
                   style={{
-                    backgroundColor: "rgba(84, 90, 146, 1)",
+                    backgroundColor: colors.schemes[theme].primary,
                     borderRadius: 3,
                     height: 32,
                     width: 4,
@@ -85,65 +126,35 @@ export default function BottomSheetContent({ setFontSize,setFontFamily, setBible
         </View>
       </View>
       <View style={styles.optionContainer}>
-        <Text variant="bodyLarge">{i18n.t("style")}</Text>
-        <View style={{marginHorizontal:16}}>
-          <View style={styles.optionContainerRadioButtons}>
-            <RadioButton
-              value="format"
-              status={bibleFormat === "format" ? "checked" : "unchecked"}
-              onPress={() => setBibleFormat("format")}
-            />
-            <Text variant="bodyLarge">{i18n.t("formatBible")}</Text>
-          </View>
-          <View style={styles.optionContainerRadioButtons}>
-            <RadioButton
-              value="byVerse"
-              status={bibleFormat === "byVerse" ? "checked" : "unchecked"}
-              onPress={() => setBibleFormat("byVerse")}
-            />
-            <Text variant="bodyLarge">{i18n.t("formatBibleVerse")}</Text>
-          </View>
-        </View>
+        <Text variant="bodyLarge" style={{ width: 50, alignSelf: "center" }}>
+          {i18n.t("style")}
+        </Text>
+        <TouchableOpacity
+          onPress={() => setBibleFormat("format")}
+          style={styles.optionContainerRadioButtons}
+        >
+          <RadioButton
+            style={{ backgroundColor: colors.schemes[theme].primary }}
+            value="format"
+            status={bibleFormat === "format" ? "checked" : "unchecked"}
+            onPress={() => setBibleFormat("format")}
+          />
+          <Text variant="bodyLarge">{i18n.t("formatBible")}</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.optionContainer}>
+        <TouchableOpacity
+          onPress={() => setBibleFormat("byVerse")}
+          style={{ marginLeft: 62, ...styles.optionContainerRadioButtons }}
+        >
+          <RadioButton
+            value="byVerse"
+            status={bibleFormat === "byVerse" ? "checked" : "unchecked"}
+            onPress={() => setBibleFormat("byVerse")}
+          />
+          <Text variant="bodyLarge">{i18n.t("formatBibleVerse")}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  optionContentContainer: {
-    width: "100%",
-    paddingHorizontal: 32,
-    gap: 12,
-  },
-  optionContainer: {
-    gap: 12,
-    height: 44,
-    flexDirection: "row",
-  },
-  optionContainerSlider: {
-    gap: 24,
-    height: 44,
-    flexDirection: "row",
-    alignItems: "center",
-    width: "90%",
-  },
-  optionContainerRadioButtons: {
-    marginTop:8,
-    gap: 12,
-    alignItems: "center",
-    flexDirection: "row",
-  },
-  sliderContainer: {
-    backgroundColor: "rgba(223, 224, 255, 1)",
-    height: 16,
-    width: "105%",
-    borderRadius: 24,
-  },
-  stepMarker: {
-    width: 4,
-    height: 4,
-    borderRadius: 30,
-    marginTop: 7,
-    backgroundColor: "rgba(84, 90, 146, 1)",
-  },
-});

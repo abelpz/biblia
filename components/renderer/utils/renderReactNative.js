@@ -73,7 +73,7 @@ function InlineElement(props) {
 
 const renderers = {
     divider:()=>{
-        return <Divider style={{  height: 1,
+        return <View style={{  height: 1,
             width: "100%",}} />
 
     },

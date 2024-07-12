@@ -20,16 +20,17 @@ import { ReadingScreenAllBook } from "../components/renderer/textComponentRender
 import TopBarForText from "../components/TopBarForText";
 import { useDocumentQuery } from "../components/renderer/textComponentRender/RenderText";
 import BottomSheetContent from "../components/BottomSheets/BottomSheetContent";
-
 import { Text, PaperProvider } from "react-native-paper";
 import BottomSheetSearch from "../components/BottomSheets/BottomSheetSearch";
 import BottomBar from "../components/BottomBar";
 import ModalTextNavigation from "../components/ModalDocNav/ModalTextNavigation";
 import { Button } from "react-native-paper";
-
+import { ColorThemeContext } from "../context/colorThemeContext";
 const Test = () => {
-  const snapPoints = useMemo(() => [300], []);
+  const snapPoints = useMemo(() => [316], []);
   const { pk } = useContext(ProskommaContext);
+  const { colors, theme } = useContext(ColorThemeContext);
+
   const bottomSheetRef = useRef(null);
   const [isOnTop, setIsOnTop] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
@@ -41,13 +42,20 @@ const Test = () => {
   const [fontFamily, setFontFamily] = useState("Roboto");
   const [bibleFormat, setBibleFormat] = useState("format");
   const [docSetId, setDocSetId] = useState("xenizo_psle_1");
-  useEffect(() => {
-    const fetchDocument = async () => {
-      const result = await useDocumentQuery(currentBook, docSetId, pk);
-      setDocResults(result.data.document.id);
-    };
-    fetchDocument();
+
+  useLayoutEffect(() => {
+    setDocResults(null);
   }, [currentBook, docSetId]);
+
+  useLayoutEffect (() => {
+    if (!documentResult) {
+      const fetchDocument = async () => {
+        const result = await useDocumentQuery(currentBook, docSetId, pk);
+        setDocResults(result);
+      };
+      fetchDocument();
+    }
+  }, [documentResult]);
 
   const handleBottomSheetOpen = useCallback(() => {
     setIsBottomSheetOpen(true);
@@ -63,6 +71,33 @@ const Test = () => {
     setCurrentBook(book);
     setCurrentChap(chap);
   }, []);
+
+  const styles = StyleSheet.create({
+    overlay: {
+      position: "absolute",
+      height: "100%",
+      width: "100%",
+      left: 0,
+      top: 0,
+      opacity: 0,
+    },
+    container: {
+      flex: 1,
+    },
+    bottomSheet: {
+      marginHorizontal: 0,
+      borderTopLeftRadius: 28,
+      borderTopRightRadius: 28,
+    },
+    handlerStyleContainer: {
+      padding: 16,
+      margin: 12,
+      height: 4,
+    },
+    handlerStyle: {
+      backgroundColor: colors.schemes[theme].outline,
+    },
+  });
 
   return (
     <GestureHandlerRootView style={styles.container}>
@@ -83,26 +118,26 @@ const Test = () => {
           bibleFormat={bibleFormat}
         />
         <ModalTextNavigation
-          setbookNav={handleModalTextNavigation}
-          currentBook={currentBook}
-          setVisible={setIsModalVisible}
-          visible={isModalVisible}
-          documentResult={documentResult}
-        />
+            setbookNav={handleModalTextNavigation}
+            currentBook={currentBook}
+            setVisible={setIsModalVisible}
+            visible={isModalVisible}
+            docSetId={docSetId}
+          />
       </PaperProvider>
       <BottomBar
-        currentBook={currentBook}
-        currentChap={currentChap}
-        documentResult={documentResult}
-        setCurrentChap={setCurrentChap}
-        setIsModalVisible={setIsModalVisible}
-      />
+          currentBook={currentBook}
+          currentChap={currentChap}
+          documentResult={documentResult}
+          setCurrentChap={setCurrentChap}
+          setIsModalVisible={setIsModalVisible}
+        />
       {isBottomSheetOpen && (
         <TouchableWithoutFeedback onPress={handleBottomSheetClose}>
           <View style={styles.overlay} />
         </TouchableWithoutFeedback>
       )}
-      <BottomSheet
+      {/* <BottomSheet
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
@@ -110,6 +145,8 @@ const Test = () => {
         enableContentPanningGesture={false}
         onClose={handleBottomSheetClose}
         enableHandlePanningGesture={true}
+        handleStyle={styles.handlerStyleContainer}
+        handleIndicatorStyle={styles.handlerStyle}
         backgroundStyle={styles.bottomSheet}
       >
         <BottomSheetContent
@@ -118,26 +155,9 @@ const Test = () => {
           setBibleFormat={setBibleFormat}
           bibleFormat={bibleFormat}
         />
-      </BottomSheet>
+      </BottomSheet> */}
     </GestureHandlerRootView>
   );
 };
-
-const styles = StyleSheet.create({
-  overlay: {
-    position: "absolute",
-    height: "100%",
-    width: "100%",
-    left: 0,
-    top: 0,
-    opacity: 0,
-  },
-  container: {
-    flex: 1,
-  },
-  bottomSheet: {
-    marginHorizontal: 0,
-  },
-});
 
 export default React.memo(Test);

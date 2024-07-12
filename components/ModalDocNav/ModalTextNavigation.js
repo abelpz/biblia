@@ -1,34 +1,58 @@
 import { Portal, Modal, Divider } from "react-native-paper";
 import { TouchableOpacity, View, StyleSheet, ScrollView } from "react-native";
 import { Text } from "react-native-paper";
-import { useState, useContext, useEffect,useRef } from "react";
+import {
+  useState,
+  useContext,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import { ProskommaContext } from "../../context/proskommaContext";
 
 export default function ModalTextNavigation({
-  documentResult,
   currentBook,
-  visible = false,
+  currentChap,
+  visible,
   setVisible,
   setbookNav,
+  docSetId,
 }) {
-
   const { pk } = useContext(ProskommaContext);
   const [book, setBook] = useState(currentBook);
   const [chapter, setChapter] = useState(1);
-  const [verse, setVerse] = useState(1);
+  // const [verse, setVerse] = useState(1);
   const [data, setData] = useState(null);
+  const [pixelNavBook, setPixelNavBook] = useState(0);
+  const parentScroll = useRef(null);
 
   useEffect(() => {
+    console.log("la");
     async function fetchData() {
-      const result = await getData(pk, "xenizo_psle_1");
-      setData(result);
+      getData(pk, docSetId).then((e) => setData(e));
     }
 
     fetchData();
-  }, [documentResult]);
+  }, [docSetId]);
 
-  if (!visible) return null;
+  useEffect(() => {
+    if (book && data) {
+      console.log("ici");
 
+      const bookIndex = data.findIndex((e) =>
+        e.headers.some((p) => p.key === "bookCode" && p.value === book)
+      );
+      if (bookIndex !== -1) {
+        setPixelNavBook(bookIndex * 56);
+      }
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (parentScroll.current) {
+      parentScroll.current.scrollTo({ x: 0, y: pixelNavBook, animated: true });
+    }
+  }, [visible]);
   return (
     <Portal>
       <Modal
@@ -57,15 +81,15 @@ export default function ModalTextNavigation({
                 Chapitre
               </Text>
             </View>
-            <View style={styles.columnTitle}>
+            {/* <View style={styles.columnTitle}>
               <Text style={styles.columnTitleText} variant="bodyMedium">
                 Verset
               </Text>
-            </View>
+            </View> */}
           </View>
           <View style={styles.columnsContainer}>
             <View style={styles.column}>
-              <ScrollView>
+              <ScrollView ref={parentScroll}>
                 {data?.map((e, id) => (
                   <TouchableOpacity
                     style={
@@ -108,7 +132,10 @@ export default function ModalTextNavigation({
                   )
                   ?.cvIndexes.map((e, id) => (
                     <TouchableOpacity
-                      onPress={() => setChapter(e.chapter)}
+                      onPress={() => {
+                        setbookNav(book, e.chapter, 1);
+                        setVisible(false);
+                      }}
                       style={
                         chapter === e.chapter
                           ? [
@@ -124,7 +151,7 @@ export default function ModalTextNavigation({
                   ))}
               </ScrollView>
             </View>
-            <Divider style={styles.divider} />
+            {/* <Divider style={styles.divider} />
             <View style={styles.column}>
               <ScrollView>
                 {data
@@ -143,7 +170,7 @@ export default function ModalTextNavigation({
                       }
                       onPress={() => {
                         setVerse(e.numbers[0]);
-                        setbookNav(book, chapter, verse);
+                        setbookNav(book, chapter, e.numbers[0]);
                         setVisible(false);
                       }}
                       key={id}
@@ -152,7 +179,7 @@ export default function ModalTextNavigation({
                     </TouchableOpacity>
                   ))}
               </ScrollView>
-            </View>
+            </View> */}
           </View>
         </View>
       </Modal>
@@ -202,9 +229,9 @@ const styles = StyleSheet.create({
   },
 });
 
-async function getData(pk, docSetid) {
+async function getData(pk, docSetId) {
   const documents = await pk.gqlQuerySync(`{
-    docSet(id: "${docSetid}"){
+    docSet(id: "${docSetId}"){
       documents {
         headers{
         key
@@ -219,8 +246,6 @@ async function getData(pk, docSetid) {
       }
     }
   }`).data?.docSet?.documents;
-
-  console.log(documents?.map((e) => e.headers.filter((p) => p.key === "toc2")));
 
   return documents;
 }

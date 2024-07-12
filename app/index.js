@@ -40,7 +40,7 @@ export default function App() {
   });
   useEffect(() => {
     const psle = require('../assets/Succinct/psle_succinct.json');
-    const psl2 = require('../assets/Succinct/psle_succinc.json');
+    const psl2 = require('../assets/Succinct/DCS_70206_2_succinct.json');
 
     pk.loadSuccinctDocSet(psle);
     pk.loadSuccinctDocSet(psl2)

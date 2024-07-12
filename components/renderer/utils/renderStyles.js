@@ -188,7 +188,7 @@ const renderStyles = {
     },
     verses_label: {
       fontWeight: "bold",
-      fontSize:"medium",
+      fontSize: "medium",
       marginRight: "0.5em",
     },
   },
@@ -419,52 +419,52 @@ function ConvertCssToReactNativeStyle(styleSheet, index) {
   return copyStyleSheet;
 }
 
-export { renderStyles,ConvertCssToReactNativeStyleOnFloor };
+export { renderStyles, ConvertCssToReactNativeStyleOnFloor };
 
-function ConvertCssToReactNativeStyleOnFloor(styleSheet, index,fontFamily=null) {
+function ConvertCssToReactNativeStyleOnFloor(
+  styleSheet,
+  index,
+  fontFamily = null
+) {
   const fontSizeTab = [
-    [11, 12, 14, 16, 22, 24, 28],
-    [12, 14, 16, 22, 24, 28, 32],
-    [14, 16, 22, 24, 28, 32, 36],
-    [16, 22, 24, 28, 32, 36, 45],
-    [22, 24, 28, 32, 36, 45, 57],
+    [14, 14, 16, 16, 22, 24, 36],
+    [14, 14, 16, 16, 22, 24, 36],
+    [14, 14, 16, 16, 22, 24, 36],
+    [14, 14, 16, 16, 22, 24, 36],
+    [14, 14, 16, 16, 22, 24, 36],
   ];
 
   const lineHeightTab = [
-    [16, 16, 20, 24, 28, 32, 36],
-    [16, 20, 24, 28, 32, 36, 40],
-    [20, 24, 28, 32, 36, 40, 44],
-    [24, 28, 32, 36, 40, 44, 52],
-    [28, 32, 36, 40, 44, 52, 64],
+    [20, 20, 24, 24, 28, 32, 44],
+    [20, 20, 24, 24, 28, 32, 44],
+    [20, 20, 24, 24, 28, 32, 44],
+    [20, 20, 24, 24, 28, 32, 44],
+    [20, 20, 24, 24, 28, 32, 44],
   ];
 
   //  note that this function is not exaustive and need futher adding. Unfortunatly not all css
   //is compatible with react native so be sure to check the documentation when adding css
-  let copyStyleSheet = {...styleSheet};
+  let copyStyleSheet = { ...styleSheet };
 
   const thirdLayerKeysArray = Object.keys(copyStyleSheet);
-  if(fontFamily){
-    let font = `${fontFamily}`
-    let values = Object.values(copyStyleSheet)
-    if(values.includes('bold') && values.includes('italic')){
-        font = font+"-BoldItalic"
-        copyStyleSheet['fontFamily'] = font
-        delete copyStyleSheet['fontWeight']
-        delete copyStyleSheet['fontStyle']
-        
-        
+  if (fontFamily) {
+    let font = `${fontFamily}`;
+    let values = Object.values(copyStyleSheet);
+    if (values.includes("bold") && values.includes("italic")) {
+      font = font + "-BoldItalic";
+      copyStyleSheet["fontFamily"] = font;
+      delete copyStyleSheet["fontWeight"];
+      delete copyStyleSheet["fontStyle"];
+    } else if (values.includes("bold")) {
+      font = font + "-Bold";
+      copyStyleSheet["fontFamily"] = font;
+      delete copyStyleSheet["fontWeight"];
+    } else if (values.includes("italic")) {
+      font = font + "-Bold";
+      copyStyleSheet["fontFamily"] = font;
+      delete copyStyleSheet["fontStyle"];
     }
-    else if(values.includes('bold')){
-        font = font+"-Bold"
-        copyStyleSheet['fontFamily'] = font
-        delete copyStyleSheet['fontWeight']
-    }
-    else if(values.includes('italic')){
-        font = font+"-Bold"
-        copyStyleSheet['fontFamily'] = font
-        delete copyStyleSheet['fontStyle']
-    }
-}
+  }
 
   thirdLayerKeysArray.map((thirdLayerKey) => {
     if (thirdLayerKey === "float") {
@@ -473,7 +473,7 @@ function ConvertCssToReactNativeStyleOnFloor(styleSheet, index,fontFamily=null) 
         delete copyStyleSheet[thirdLayerKey];
       }
     }
-    
+
     if (thirdLayerKey === "verticalAlign") {
       if (copyStyleSheet[thirdLayerKey] === "super") {
         copyStyleSheet[thirdLayerKey] = "top";
@@ -488,8 +488,7 @@ function ConvertCssToReactNativeStyleOnFloor(styleSheet, index,fontFamily=null) 
       }
       delete copyStyleSheet[thirdLayerKey];
     }
-   
-  
+
     if (copyStyleSheet[thirdLayerKey] === "medium") {
       copyStyleSheet[thirdLayerKey] = fontSizeTab[index][3];
       copyStyleSheet["lineHeight"] = lineHeightTab[index][3];

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { ScrollView, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { SofriaRenderFromProskomma } from "proskomma-json-tools";
 import sofria2WebActions from "../utils/sofria2WebActions";
 import { renderers } from "../utils/renderReactNative";
-
+import { ColorThemeContext } from "../../../context/colorThemeContext";
+import { StyleSheet } from "react-native";
 export function ReadingScreenAllBook({
   currentChap,
   setIsOnTop,
@@ -16,7 +17,7 @@ export function ReadingScreenAllBook({
 }) {
   const [chapterBuffer, setChapterBuffer] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const { colors, theme } = useContext(ColorThemeContext);
   const [option, setOption] = useState({
     showWordAtts: false,
     showTitles: true,
@@ -38,7 +39,22 @@ export function ReadingScreenAllBook({
     },
     renderers,
   });
-
+  const styles = StyleSheet.create({
+    scrollContainer: {
+      backgroundColor: colors.schemes[theme].surface,
+      paddingHorizontal: 10,
+      height: "80%",
+    },
+    activityContainer: {
+      width: "100%",
+      height: "100%",
+      padding: 5,
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: colors.schemes[theme].surface,
+    },
+  });
+  
   useEffect(() => {
     setOption((prev) => ({
       ...prev,
@@ -65,28 +81,20 @@ export function ReadingScreenAllBook({
       }, 0);
       return () => clearTimeout(timeoutId);
     }
-  }, [documentResult,option]);
+  }, [documentResult, option]);
 
   useEffect(() => {
     setIsLoading(false);
   }, [chapterBuffer]);
 
   return isLoading ? (
-    <View
-      style={{
-        width: "100%",
-        height: "75%",
-        margin: 5,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <View style={styles.activityContainer}>
       <ActivityIndicator />
     </View>
   ) : (
     <ScrollView
       onScroll={(e) => setIsOnTop(e.nativeEvent.contentOffset.y > 0)}
-      style={{ paddingHorizontal: 10, height: "80%" }}
+      style={styles.scrollContainer}
     >
       {chapterBuffer.map((c, id) => (
         <View key={id}>{c}</View>
@@ -108,7 +116,7 @@ export function renderDoc(documentResult, pk, option) {
 
     try {
       renderer.renderDocument1({
-        docId: documentResult,
+        docId: documentResult.data.document.id,
         config,
         output,
         workspace,

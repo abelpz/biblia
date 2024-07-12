@@ -15,5 +15,5 @@ const styles = StyleSheet.create({
   container: {
   },
   phoneNotif: { height: 40 },
-  headerContainer: { height: 360,height:48},
+  headerContainer: { height: 360,height:64},
 });
