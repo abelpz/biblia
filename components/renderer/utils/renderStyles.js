@@ -254,171 +254,6 @@ const renderStyles = {
   },
 };
 
-function ConvertCssToReactNativeStyle(styleSheet, index) {
-  const fontSizeTab = [
-    [11, 12, 14, 16, 22, 24, 28],
-    [12, 14, 16, 22, 24, 28, 32],
-    [14, 16, 22, 24, 28, 32, 36],
-    [16, 22, 24, 28, 32, 36, 45],
-    [22, 24, 28, 32, 36, 45, 57],
-  ];
-
-  const lineHeightTab = [
-    [16, 16, 20, 24, 28, 32, 36],
-    [16, 20, 24, 28, 32, 36, 40],
-    [20, 24, 28, 32, 36, 40, 44],
-    [24, 28, 32, 36, 40, 44, 52],
-    [28, 32, 36, 40, 44, 52, 64],
-  ];
-
-  //  note that this function is not exaustive and need futher adding. Unfortunatly not all css
-  //is compatible with react native so be sure to check the documentation when adding css
-  let copyStyleSheet = styleSheet;
-  const keyFirstLayerArray = Object.keys(copyStyleSheet);
-  keyFirstLayerArray.map((firstLayerKeys) => {
-    const secondLayerKeysArray = Object.keys(copyStyleSheet[firstLayerKeys]);
-    secondLayerKeysArray.map((secondLayerKey) => {
-      const thirdLayerKeysArray = Object.keys(
-        copyStyleSheet[firstLayerKeys][secondLayerKey]
-      );
-      thirdLayerKeysArray.map((thirdLayerKey) => {
-        if (thirdLayerKey === "float") {
-          if (
-            copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] ===
-            "left"
-          ) {
-            copyStyleSheet[firstLayerKeys][secondLayerKey]["textAlign"] =
-              "left";
-            delete copyStyleSheet[firstLayerKeys][secondLayerKey][
-              thirdLayerKey
-            ];
-          }
-        }
-        if (thirdLayerKey === "verticalAlign") {
-          if (
-            copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] ===
-            "super"
-          ) {
-            copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] =
-              "top";
-          }
-        }
-        if (thirdLayerKey === "textIndent") {
-          if (
-            copyStyleSheet[firstLayerKeys][secondLayerKey][
-              thirdLayerKey
-            ].includes("em")
-          ) {
-            let stringToChange =
-              copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey];
-            stringToChange.replace("em", "");
-            copyStyleSheet[firstLayerKeys][secondLayerKey]["marginLeft"] =
-              parseFloat(stringToChange) * 16;
-            delete copyStyleSheet[firstLayerKeys][secondLayerKey][
-              thirdLayerKey
-            ];
-          }
-          delete copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey];
-        }
-        if (
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] ===
-          "medium"
-        ) {
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] =
-            fontSizeTab[index][3];
-          copyStyleSheet[firstLayerKeys][secondLayerKey]["lineHeight"] =
-            lineHeightTab[index][3];
-        }
-        if (
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] ===
-          "x-small"
-        ) {
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] =
-            fontSizeTab[index][1];
-          copyStyleSheet[firstLayerKeys][secondLayerKey]["lineHeight"] =
-            lineHeightTab[index][1];
-        }
-        if (
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] ===
-          "xx-small"
-        ) {
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] =
-            fontSizeTab[index][0];
-          copyStyleSheet[firstLayerKeys][secondLayerKey]["lineHeight"] =
-            lineHeightTab[index][0];
-        }
-        if (
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] ===
-          "small"
-        ) {
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] =
-            fontSizeTab[index][2];
-          copyStyleSheet[firstLayerKeys][secondLayerKey]["lineHeight"] =
-            lineHeightTab[index][2];
-        }
-        if (
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] ===
-          "large"
-        ) {
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] =
-            fontSizeTab[index][4];
-          copyStyleSheet[firstLayerKeys][secondLayerKey]["lineHeight"] =
-            lineHeightTab[index][4];
-        }
-        if (
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] ===
-          "x-large"
-        ) {
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] =
-            fontSizeTab[index][5];
-          copyStyleSheet[firstLayerKeys][secondLayerKey]["lineHeight"] =
-            lineHeightTab[index][5];
-        }
-        if (
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] ===
-          "xx-large"
-        ) {
-          copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] =
-            fontSizeTab[index][6];
-          copyStyleSheet[firstLayerKeys][secondLayerKey]["lineHeight"] =
-            lineHeightTab[index][6];
-        }
-        if (
-          typeof copyStyleSheet[firstLayerKeys][secondLayerKey][
-            thirdLayerKey
-          ] === typeof "string"
-        ) {
-          if (
-            copyStyleSheet[firstLayerKeys][secondLayerKey][
-              thirdLayerKey
-            ].includes("em")
-          ) {
-            let stringToChange =
-              copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey];
-            stringToChange.replace("em", "");
-            copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] =
-              parseFloat(stringToChange) * fontSizeTab[index][3];
-            return;
-          }
-          if (
-            copyStyleSheet[firstLayerKeys][secondLayerKey][
-              thirdLayerKey
-            ].includes("ex")
-          ) {
-            let stringToChange =
-              copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey];
-            stringToChange.replace("ex", "");
-            copyStyleSheet[firstLayerKeys][secondLayerKey][thirdLayerKey] =
-              parseFloat(stringToChange);
-            return;
-          }
-        }
-      });
-    });
-  });
-  return copyStyleSheet;
-}
-
 export { renderStyles, ConvertCssToReactNativeStyleOnFloor };
 
 function ConvertCssToReactNativeStyleOnFloor(
@@ -426,44 +261,32 @@ function ConvertCssToReactNativeStyleOnFloor(
   index,
   fontFamily = null
 ) {
-  const fontSizeTab = [
-    [14, 14, 16, 16, 22, 24, 36],
-    [14, 14, 16, 16, 22, 24, 36],
-    [14, 14, 16, 16, 22, 24, 36],
-    [14, 14, 16, 16, 22, 24, 36],
-    [14, 14, 16, 16, 22, 24, 36],
-  ];
-
-  const lineHeightTab = [
-    [20, 20, 24, 24, 28, 32, 44],
-    [20, 20, 24, 24, 28, 32, 44],
-    [20, 20, 24, 24, 28, 32, 44],
-    [20, 20, 24, 24, 28, 32, 44],
-    [20, 20, 24, 24, 28, 32, 44],
-  ];
+  const multiTab = [0.75, 0.88, 1, 1.15, 1.25];
+  const fontSpace = [0.1, 0.25, 0.5, 0.14, 0, 0, 0];
+  const fontSizeTab = [14, 14, 16, 16, 22, 24, 36];
+  const lineHeightTab = [20, 20, 24, 24, 28, 32, 44];
 
   //  note that this function is not exaustive and need futher adding. Unfortunatly not all css
   //is compatible with react native so be sure to check the documentation when adding css
   let copyStyleSheet = { ...styleSheet };
 
   const thirdLayerKeysArray = Object.keys(copyStyleSheet);
-  if (fontFamily) {
-    let font = `${fontFamily}`;
-    let values = Object.values(copyStyleSheet);
-    if (values.includes("bold") && values.includes("italic")) {
-      font = font + "-BoldItalic";
-      copyStyleSheet["fontFamily"] = font;
-      delete copyStyleSheet["fontWeight"];
-      delete copyStyleSheet["fontStyle"];
-    } else if (values.includes("bold")) {
-      font = font + "-Bold";
-      copyStyleSheet["fontFamily"] = font;
-      delete copyStyleSheet["fontWeight"];
-    } else if (values.includes("italic")) {
-      font = font + "-Bold";
-      copyStyleSheet["fontFamily"] = font;
-      delete copyStyleSheet["fontStyle"];
-    }
+
+  let font = `${fontFamily}`;
+  let values = Object.values(copyStyleSheet);
+  if (values.includes("bold") && values.includes("italic")) {
+    // font = font + "-BoldItalic";
+    // copyStyleSheet["fontFamily"] = font;
+    delete copyStyleSheet["fontWeight"];
+    delete copyStyleSheet["fontStyle"];
+  } else if (values.includes("bold")) {
+    // font = font + "-Bold";
+    // copyStyleSheet["fontFamily"] = font;
+    delete copyStyleSheet["fontWeight"];
+  } else if (values.includes("italic")) {
+    // font = font + "-Bold";
+    // copyStyleSheet["fontFamily"] = font;
+    delete copyStyleSheet["fontStyle"];
   }
 
   thirdLayerKeysArray.map((thirdLayerKey) => {
@@ -489,40 +312,68 @@ function ConvertCssToReactNativeStyleOnFloor(
       delete copyStyleSheet[thirdLayerKey];
     }
 
-    if (copyStyleSheet[thirdLayerKey] === "medium") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[index][3];
-      copyStyleSheet["lineHeight"] = lineHeightTab[index][3];
+    if (copyStyleSheet[thirdLayerKey] === "xx-small") {
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[0] * multiTab[index]
+      copyStyleSheet["lineHeight"] = lineHeightTab[0]  * multiTab[index]
+      copyStyleSheet["letterSpacing"] = fontSpace[0];
+      if (fontFamily) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}-Medium`;
+      }
     }
     if (copyStyleSheet[thirdLayerKey] === "x-small") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[index][1];
-      copyStyleSheet["lineHeight"] = lineHeightTab[index][1];
-    }
-    if (copyStyleSheet[thirdLayerKey] === "xx-small") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[index][0];
-      copyStyleSheet["lineHeight"] = lineHeightTab[index][0];
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[1]  * multiTab[index]
+      copyStyleSheet["lineHeight"] = lineHeightTab[1]  * multiTab[index]
+      copyStyleSheet["letterSpacing"] = fontSpace[1];
+      if (fontFamily) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}-Regular`;
+      }
     }
     if (copyStyleSheet[thirdLayerKey] === "small") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[index][2];
-      copyStyleSheet["lineHeight"] = lineHeightTab[index][2];
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[2]  * multiTab[index]
+      copyStyleSheet["lineHeight"] = lineHeightTab[2]  * multiTab[index]
+      copyStyleSheet["letterSpacing"] = fontSpace[2];
+      if (fontFamily) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}-Regular`;
+      }
+    }
+    if (copyStyleSheet[thirdLayerKey] === "medium") {
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[3]  * multiTab[index]
+      copyStyleSheet["lineHeight"] = lineHeightTab[3]  * multiTab[index]
+      copyStyleSheet["letterSpacing"] = fontSpace[3];
+      if (fontFamily) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}-Medium`;
+      }
     }
     if (copyStyleSheet[thirdLayerKey] === "large") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[index][4];
-      copyStyleSheet["lineHeight"] = lineHeightTab[index][4];
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[4]  * multiTab[index]
+      copyStyleSheet["lineHeight"] = lineHeightTab[4]  * multiTab[index]
+      copyStyleSheet["letterSpacing"] = fontSpace[4];
+      if (fontFamily) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}-Regular`;
+      }
     }
     if (copyStyleSheet[thirdLayerKey] === "x-large") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[index][5];
-      copyStyleSheet["lineHeight"] = lineHeightTab[index][5];
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[5]  * multiTab[index]
+      copyStyleSheet["lineHeight"] = lineHeightTab[5]  * multiTab[index]
+      copyStyleSheet["letterSpacing"] = fontSpace[5];
+      if (fontFamily) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}-Regular`;
+      }
     }
     if (copyStyleSheet[thirdLayerKey] === "xx-large") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[index][6];
-      copyStyleSheet["lineHeight"] = lineHeightTab[index][6];
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[6]  * multiTab[index]
+      copyStyleSheet["lineHeight"] = lineHeightTab[6]  * multiTab[index]
+      copyStyleSheet["letterSpacing"] = fontSpace[6];
+      if (fontFamily) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}-Regular`;
+      }
     }
     if (typeof copyStyleSheet[thirdLayerKey] === typeof "string") {
       if (copyStyleSheet[thirdLayerKey].includes("em")) {
         let stringToChange = copyStyleSheet[thirdLayerKey];
         stringToChange.replace("em", "");
         copyStyleSheet[thirdLayerKey] =
-          parseFloat(stringToChange) * fontSizeTab[index][3];
+          parseFloat(stringToChange) * fontSizeTab[3];
         return;
       }
       if (copyStyleSheet[thirdLayerKey].includes("ex")) {

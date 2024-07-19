@@ -16,6 +16,7 @@ function getStyles(type, subType, indexForStyle,fontFamily=null) {
     return ConvertCssToReactNativeStyleOnFloor(rs[type].default, 0);
   }
   if (indexForStyle) {
+  
     return ConvertCssToReactNativeStyleOnFloor(
       rs[type][subType],
       indexForStyle,
@@ -86,7 +87,8 @@ const renderers = {
               fontFamily: fontConfig.fontFamily,
               ...ConvertCssToReactNativeStyleOnFloor(
                 { fontSize: "medium" },
-                parseInt(fontConfig.fontSize)
+                parseInt(fontConfig.fontSize),
+               fontConfig.fontFamily
               ),
             }}
           >

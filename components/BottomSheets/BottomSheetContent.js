@@ -37,19 +37,19 @@ export default function BottomSheetContent({
       height: 44,
       flexDirection: "row",
       alignItems: "center",
-      width: "90%",
+      width: "100%",
     },
     optionContainerRadioButtons: {
       paddingHorizontal: 16,
-      gap: 12,
-      width: 234,
+      gap: 16,
+      flex:1,
       alignItems: "center",
       flexDirection: "row",
     },
     sliderContainer: {
       backgroundColor: colors.schemes[theme].primaryContainer,
       height: 16,
-      width: "105%",
+      width: "100 %",
       borderRadius: 24,
     },
     stepMarker: {
@@ -66,16 +66,16 @@ export default function BottomSheetContent({
       <View style={[styles.optionContainer, { height: 24 }]}>
         <Text variant="titleMedium">{i18n.t("textOptionGreeting")}</Text>
       </View>
-      <View style={styles.optionContainer}>
+      {/* <View style={styles.optionContainer}>
         <Text style={{ alignSelf: "center" }} variant="bodyLarge">
           Police
         </Text>
         <DropDownSelectFont setFontFamily={setFontFamily} />
-      </View>
+      </View> */}
 
       <View style={styles.optionContainerSlider}>
         <Text variant="bodyLarge">Taille</Text>
-        <View style={{ width: 234, marginHorizontal: 16 }}>
+        <View style={{ flex:1, marginLeft: 32 }}>
           <Slider
             theme={{
               maximumTrackTintColor: "rgba(223, 224, 255, 1)",

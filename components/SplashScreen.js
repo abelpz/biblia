@@ -1,18 +1,23 @@
 import { View, Image } from "react-native";
-import { Text } from 'react-native-paper';
-
+import { ActivityIndicator, Text } from "react-native-paper";
+import { useContext } from "react";
+import { ColorThemeContext } from "../context/colorThemeContext";
 export default function SplashScreenXenizo() {
+  const { colors, theme } = useContext(ColorThemeContext);
   return (
     <View
       style={{
-        height: '100%',
-        backgroundColor: "rgba(84, 90, 146, 1)",
+        height: "100%",
+        backgroundColor: "rgba(223, 224, 255, 1)",
         justifyContent: "center",
         alignItems: "center",
+        gap:31,
       }}
     >
-      <Image source={require("../assets/icons/SplashScreen/Logo.png")} />
-      <Text style={{color:'white'}} variant="displaySmall">Katesthio</Text>
+      <Image
+        source={require("../app/assets/icons/SplashScreen/Icon2.png")}
+      />
+      <ActivityIndicator size={'large'}/>
     </View>
   );
 }

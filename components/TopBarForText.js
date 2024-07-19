@@ -11,12 +11,10 @@ import {
   useDerivedValue,
   withTiming,
 } from "react-native-reanimated";
-import {
-  RessourcesIcon,
-  ArrowDownIcon,
-  AddRessourcesIcon,
-  ParamTextIcon,
-} from "../assets/icons/flavorIcons/icons";
+import ResourcesIcon from "../app/assets/icons/flavorIcons/resources";
+import ArrowDownIcon from "../app/assets/icons/flavorIcons/arrowDown";
+import ParamTextIcon from "../app/assets/icons/flavorIcons/paramText";
+import AddResourcesIcon from "../app/assets/icons/flavorIcons/addResources";
 import DropDownSelectRessources from "./DropDownSelectRessources";
 import { ColorThemeContext } from "../context/colorThemeContext";
 
@@ -74,58 +72,68 @@ export default function TopBarForText({
       <TopBarContainer>
         <View
           style={{
-            width: "50%",
             flexDirection: "row",
             gap: 4,
             height: 48,
             paddingHorizontal: 4,
             paddingVertical: 8,
             alignItems: "center",
+            flex: 1,
           }}
         >
           <View style={{ height: 48, width: 48 }}></View>
-
-          <DropDownSelectRessources setDocSetId={functionTitle} />
+          <View style={{}}>
+            <DropDownSelectRessources setDocSetId={functionTitle} />
+          </View>
           <View
             style={{
+              height: 48,
               flexDirection: "row",
-              gap: 0,
-              alignItems: "center",
+              margin: 0,
             }}
           >
             <View
               style={{
-                height: 48,
-                height: 48,
                 justifyContent: "center",
-                alignItems: "center",
+                alignSelf: "center",
+                height: 48,
+                width: 48,
+                margin: 0,
+                padding: 0,
               }}
             >
               <IconButton
-                size={48}
-                style={{margin:0}}
+                style={{
+                  margin: 0,
+                  alignSelf: "center",
+                  width: 48,
+                  height: 48,
+                }}
                 onPress={() => functionParamText()}
-                icon={() => <ParamTextIcon/>}
+                icon={() => <ParamTextIcon />}
               />
             </View>
 
-            {/* <View style={{ height: 48, width: 48 }}></View> */}
             <View
               style={{
                 height: 48,
-                height: 48,
+                width: 48,
+                padding: 0,
+                margin: 0,
                 justifyContent: "center",
-                alignItems: "center",
               }}
             >
               <IconButton
-              style={{ margin: 0 }}
-              onPress={functionParamText}
-              icon={() => <AddRessourcesIcon/>}
-              size={48}
-            />
+                style={{
+                  alignSelf: "center",
+                  width: 48,
+                  height: 48,
+                  margin: 0,
+                }}
+                onPress={functionParamText}
+                icon={() => <AddResourcesIcon/>}
+              />
             </View>
-          
           </View>
         </View>
       </TopBarContainer>

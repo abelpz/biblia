@@ -36,10 +36,11 @@ const Test = () => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentChap, setCurrentChap] = useState(1);
+  const [maxChap, setMaxChap] = useState(1);
   const [fontSize, setFontSize] = useState(2);
   const [documentResult, setDocResults] = useState(null);
   const [currentBook, setCurrentBook] = useState("PHP");
-  const [fontFamily, setFontFamily] = useState("Roboto");
+  const [fontFamily, setFontFamily] = useState("NotoSans");
   const [bibleFormat, setBibleFormat] = useState("format");
   const [docSetId, setDocSetId] = useState("xenizo_psle_1");
 
@@ -47,10 +48,15 @@ const Test = () => {
     setDocResults(null);
   }, [currentBook, docSetId]);
 
-  useLayoutEffect (() => {
+  useLayoutEffect(() => {
     if (!documentResult) {
       const fetchDocument = async () => {
         const result = await useDocumentQuery(currentBook, docSetId, pk);
+        setMaxChap(
+          result.data.document.cvIndexes[
+            result.data.document.cvIndexes.length - 1
+          ].chapter
+        );
         setDocResults(result);
       };
       fetchDocument();
@@ -101,13 +107,12 @@ const Test = () => {
 
   return (
     <GestureHandlerRootView style={styles.container}>
+      <TopBarForText
+        isOnTop={isOnTop}
+        functionTitle={setDocSetId}
+        functionParamText={handleBottomSheetOpen}
+      />
       <PaperProvider>
-        <TopBarForText
-          isOnTop={isOnTop}
-          functionTitle={setDocSetId}
-          functionParamText={handleBottomSheetOpen}
-        />
-
         <ReadingScreenAllBook
           setIsOnTop={setIsOnTop}
           documentResult={documentResult}
@@ -118,26 +123,28 @@ const Test = () => {
           bibleFormat={bibleFormat}
         />
         <ModalTextNavigation
-            setbookNav={handleModalTextNavigation}
-            currentBook={currentBook}
-            setVisible={setIsModalVisible}
-            visible={isModalVisible}
-            docSetId={docSetId}
-          />
+          setbookNav={handleModalTextNavigation}
+          currentBook={currentBook}
+          setVisible={setIsModalVisible}
+          visible={isModalVisible}
+          docSetId={docSetId}
+        />
       </PaperProvider>
       <BottomBar
-          currentBook={currentBook}
-          currentChap={currentChap}
-          documentResult={documentResult}
-          setCurrentChap={setCurrentChap}
-          setIsModalVisible={setIsModalVisible}
-        />
+        currentBook={currentBook}
+        currentChap={currentChap}
+        maxChap={maxChap}
+        documentResult={documentResult}
+        setCurrentChap={setCurrentChap}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+      />
       {isBottomSheetOpen && (
         <TouchableWithoutFeedback onPress={handleBottomSheetClose}>
           <View style={styles.overlay} />
         </TouchableWithoutFeedback>
       )}
-      {/* <BottomSheet
+      <BottomSheet
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
@@ -155,7 +162,7 @@ const Test = () => {
           setBibleFormat={setBibleFormat}
           bibleFormat={bibleFormat}
         />
-      </BottomSheet> */}
+      </BottomSheet>
     </GestureHandlerRootView>
   );
 };

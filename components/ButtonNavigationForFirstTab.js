@@ -1,8 +1,8 @@
 import React from "react";
 import { View } from "react-native";
 import { Text, Card } from "react-native-paper";
-import { NoDefIcon } from "../assets/icons/flavorIcons/icons";
- import { ArrowDownIcon } from "../assets/icons/flavorIcons/icons";
+import NoDefIcon from "../app/assets/icons/flavorIcons/notdefsolid";
+import ArrowDownIcon from "../app/assets/icons/flavorIcons/arrowDown";
 import { Link } from "expo-router";
 export default function ButtonNavigationForFirstTab({
   Logo,

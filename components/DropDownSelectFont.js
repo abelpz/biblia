@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import {
-  RessourcesIcon,
-  ArrowDownIcon,
-} from "../assets/icons/flavorIcons/icons";
+import ResourcesIcon from "../app/assets/icons/flavorIcons/resources";
+import ArrowDownIcon from "../app/assets/icons/flavorIcons/arrowDown";
+
 import { Text } from "react-native-paper";
 import { ProskommaContext } from "../context/proskommaContext";
 

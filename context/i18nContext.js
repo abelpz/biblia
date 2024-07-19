@@ -1,6 +1,6 @@
 // LanguageContext.js
 import { I18n } from "i18n-js";
-import { translations } from "../assets/i18n/localization";
+import { translations } from "../app/assets/i18n/localization";
 import React, { createContext } from "react";
 const I18nContext = createContext();
 
