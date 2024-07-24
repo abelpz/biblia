@@ -1,20 +1,28 @@
-import React, { useState, useContext, useRef, useLayoutEffect, useEffect } from "react";
+import React, {
+  useState,
+  useContext,
+  useRef,
+  useLayoutEffect,
+  useEffect,
+} from "react";
 import { StyleSheet, View, Dimensions } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import ArrowDownIcon from "../app/assets/icons/flavorIcons/arrowDown";
-import ResourcesIcon from "../app/assets/icons/flavorIcons/resources";
+import ArrowDownIcon from "../assets/icons/flavorIcons/arrowDown";
+import ResourcesIcon from "../assets/icons/flavorIcons/resources";
 import { TouchableRipple } from "react-native-paper";
 import { ProskommaContext } from "../context/proskommaContext";
+import { ColorThemeContext } from "../context/colorThemeContext";
 
 export default function DropDownSelectRessources({ setDocSetId, docSetId }) {
   const [inComponentValue, setInComponentValue] = useState(null);
   const { pk } = useContext(ProskommaContext);
+  const { colors, theme } = useContext(ColorThemeContext);
+
   const dropdownRef = useRef(null);
   const data = useRef(createDataArray(pk));
-  useEffect(()=>{
-    setInComponentValue(data.current[0].value)
-
-  },[data])
+  useEffect(() => {
+    setInComponentValue(data.current[0].value);
+  }, [data]);
 
   useEffect(() => {
     if (inComponentValue) {
@@ -37,10 +45,33 @@ export default function DropDownSelectRessources({ setDocSetId, docSetId }) {
       <Dropdown
         ref={dropdownRef}
         style={[styles.dropdown]}
-        placeholderStyle={styles.placeholderStyle}
-        itemContainerStyle={styles.itemContainerStyle}
-        selectedTextStyle={styles.selectedTextStyle}
-        containerStyle={styles.containerStyle}
+        itemTextStyle={{ color: colors.schemes[theme].onSurface }}
+        placeholderStyle={[
+          styles.placeholderStyle,
+          {
+            color: colors.schemes[theme].onSurface,
+            backgroundColor: colors.schemes[theme].surface,
+          },
+        ]}
+        itemContainerStyle={[
+          styles.itemContainerStyle,
+          {
+            color: colors.schemes[theme].onSurface,
+            backgroundColor: colors.schemes[theme].surface,
+          },
+        ]}
+        selectedTextStyle={[
+          styles.selectedTextStyle,
+          { color: colors.schemes[theme].onSurfaceVariant },
+        ]}
+        containerStyle={[
+          styles.containerStyle,
+          {
+            backgroundColor: colors.schemes[theme].surface,
+            color: colors.schemes[theme].onSurface,
+          },
+        ]}
+        activeColor={colors.schemes[theme].surfaceVariant}
         selectedTextProps={{
           numberOfLines: 1,
           ellipsizeMode: "tail",
@@ -53,12 +84,20 @@ export default function DropDownSelectRessources({ setDocSetId, docSetId }) {
         showsVerticalScrollIndicator={true}
         renderLeftIcon={() => (
           <View style={{ marginLeft: 12 }}>
-            <ResourcesIcon width={18} height={18} />
+            <ResourcesIcon
+              color={colors.schemes[theme].onSurface}
+              width={18}
+              height={18}
+            />
           </View>
         )}
         renderRightIcon={() => (
           <View style={{ marginRight: 12 }}>
-            <ArrowDownIcon width={18} height={18} />
+            <ArrowDownIcon
+              color={colors.schemes[theme].onSurface}
+              width={18}
+              height={18}
+            />
           </View>
         )}
       />
@@ -69,7 +108,7 @@ export default function DropDownSelectRessources({ setDocSetId, docSetId }) {
         rippleColor="rgba(0, 0, 0, .32)"
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <View style={{ flex: 1, height: '100%' }} />
+          <View style={{ flex: 1, height: "100%" }} />
         </View>
       </TouchableRipple>
     </View>
@@ -82,7 +121,8 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 32,
-    width: Dimensions.get("window").width - 4 * 48,
+
+    width: Dimensions.get("window").width - 4 * 48 - 16, //-16 for 4*2 padding and 4*2 for 4 gap
     borderWidth: 1,
     borderRadius: 9,
     borderColor: "#777680",
@@ -103,10 +143,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   containerStyle: {
-    marginTop: 16,
     maxHeight: 600,
     minHeight: 300,
-    borderBottomLeftRadius: 10,
+    borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,
     paddingBottom: 12,
   },
@@ -118,7 +157,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     height: 32,
     zIndex: 2,
-    borderRadius:9,
+    borderRadius: 9,
     backgroundColor: "rgba(0,0,0,0)",
     justifyContent: "center",
     alignItems: "center",

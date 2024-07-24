@@ -11,10 +11,11 @@ import {
   useDerivedValue,
   withTiming,
 } from "react-native-reanimated";
-import ResourcesIcon from "../app/assets/icons/flavorIcons/resources";
-import ArrowDownIcon from "../app/assets/icons/flavorIcons/arrowDown";
-import ParamTextIcon from "../app/assets/icons/flavorIcons/paramText";
-import AddResourcesIcon from "../app/assets/icons/flavorIcons/addResources";
+import ResourcesIcon from "../assets/icons/flavorIcons/resources";
+import ArrowDownIcon from "../assets/icons/flavorIcons/arrowDown";
+import InfoIcon from "../assets/icons/flavorIcons/info";
+import ParamTextIcon from "../assets/icons/flavorIcons/paramText";
+import AddResourcesIcon from "../assets/icons/flavorIcons/addResources";
 import DropDownSelectRessources from "./DropDownSelectRessources";
 import { ColorThemeContext } from "../context/colorThemeContext";
 
@@ -23,7 +24,9 @@ export default function TopBarForText({
   functionTitle,
   functionParamText,
   functionAddResources,
+  functionInfo,
   setIsOnTop,
+  children
 }) {
   const { colors, theme } = useContext(ColorThemeContext);
   const progress = useDerivedValue(() => {
@@ -68,7 +71,8 @@ export default function TopBarForText({
   });
 
   return (
-    <Animated.View style={[HeaderStyle]}>
+    <>
+    <Animated.View style={[HeaderStyle, { width: "100%" }]}>
       <TopBarContainer>
         <View
           style={{
@@ -78,16 +82,14 @@ export default function TopBarForText({
             paddingHorizontal: 4,
             paddingVertical: 8,
             alignItems: "center",
-            flex: 1,
           }}
         >
-          <View style={{ height: 48, width: 48 }}></View>
-          <View style={{}}>
-            <DropDownSelectRessources setDocSetId={functionTitle} />
-          </View>
+          <View style={{ height: 48, width: 48}}></View>
+          <DropDownSelectRessources setDocSetId={functionTitle} />
           <View
             style={{
               height: 48,
+              width: 48*3,
               flexDirection: "row",
               margin: 0,
             }}
@@ -113,7 +115,27 @@ export default function TopBarForText({
                 icon={() => <ParamTextIcon />}
               />
             </View>
-
+            <View
+              style={{
+                justifyContent: "center",
+                alignSelf: "center",
+                height: 48,
+                width: 48,
+                margin: 0,
+                padding: 0,
+              }}
+            >
+              <IconButton
+                style={{
+                  margin: 0,
+                  alignSelf: "center",
+                  width: 48,
+                  height: 48,
+                }}
+                onPress={() => functionInfo()}
+                icon={() => <InfoIcon />}
+              />
+            </View>
             <View
               style={{
                 height: 48,
@@ -131,12 +153,14 @@ export default function TopBarForText({
                   margin: 0,
                 }}
                 onPress={functionParamText}
-                icon={() => <AddResourcesIcon/>}
+                icon={() => <AddResourcesIcon />}
               />
             </View>
           </View>
         </View>
       </TopBarContainer>
     </Animated.View>
+    <View style={{flex:1}}>{children}</View>
+    </>
   );
 }

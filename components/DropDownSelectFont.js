@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import ResourcesIcon from "../app/assets/icons/flavorIcons/resources";
-import ArrowDownIcon from "../app/assets/icons/flavorIcons/arrowDown";
+import ResourcesIcon from "../assets/icons/flavorIcons/resources";
+import ArrowDownIcon from "../assets/icons/flavorIcons/arrowDown";
 
 import { Text } from "react-native-paper";
 import { ProskommaContext } from "../context/proskommaContext";
@@ -43,7 +43,7 @@ export default function DropDownSelectFont({setFontFamily}) {
 const styles = StyleSheet.create({
 
   dropdown: { 
-    width: 150,
+    width:150,
     height: 32,
     borderWidth: 1,
     borderRadius: 9,

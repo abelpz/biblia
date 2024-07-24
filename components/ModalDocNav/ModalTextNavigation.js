@@ -20,7 +20,6 @@ export default function ModalTextNavigation({
   setbookNav,
   docSetId,
 }) {
-  console.log('ici',docSetId)
   const { pk } = useContext(ProskommaContext);
   const [book, setBook] = useState(currentBook);
   const [chapter, setChapter] = useState(currentChap);
@@ -29,6 +28,8 @@ export default function ModalTextNavigation({
   const [pixelNavBook, setPixelNavBook] = useState(0);
   const parentScroll = useRef(null);
   const { i18n } = useContext(I18nContext);
+
+  useEffect(()=>{setBook(currentBook)},[currentBook])
 
   useEffect(() => {
     async function fetchData() {
@@ -40,8 +41,6 @@ export default function ModalTextNavigation({
 
   useEffect(() => {
     if (book && data) {
-      console.log("ici");
-
       const bookIndex = data.findIndex((e) =>
         e.headers.some((p) => p.key === "bookCode" && p.value === book)
       );
@@ -57,112 +56,108 @@ export default function ModalTextNavigation({
     }
   }, [visible]);
   return (
-      <Portal>
-        <Modal
-          onDismiss={() => setVisible(false)}
-          visible={visible}
-          style={{ marginTop: 0 }}
-          contentContainerStyle={styles.container}
-        >
-          <View style={{ flex: 1 }}>
-            <View style={styles.title}>
-              <Text variant="headlineSmall">{i18n.t("navigateTo")}</Text>
+    <Portal>
+      <Modal
+        onDismiss={() => setVisible(false)}
+        visible={visible}
+        style={{ marginTop: 0 }}
+        contentContainerStyle={styles.container}
+      >
+        <View style={{ flex: 1 }}>
+          <View style={styles.title}>
+            <Text variant="headlineSmall">{i18n.t("navigateTo")}</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              height: 20,
+              marginBottom: 24,
+            }}
+          >
+            <View style={styles.columnTitle}>
+              <Text style={styles.columnTitleText} variant="bodyMedium">
+                {i18n.t("book")}
+              </Text>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                height: 20,
-                marginBottom: 24,
-              }}
-            >
-              <View style={styles.columnTitle}>
-                <Text style={styles.columnTitleText} variant="bodyMedium">
-                  {i18n.t("book")}
-                </Text>
-              </View>
-              <View style={styles.columnTitle}>
-                <Text style={styles.columnTitleText} variant="bodyMedium">
+            <View style={styles.columnTitle}>
+              <Text style={styles.columnTitleText} variant="bodyMedium">
                 {i18n.t("chapter")}
-
-                </Text>
-              </View>
-              {/* <View style={styles.columnTitle}>
+              </Text>
+            </View>
+            {/* <View style={styles.columnTitle}>
               <Text style={styles.columnTitleText} variant="bodyMedium">
                                   {i18n.t("verse")}
 
               </Text>
             </View> */}
-            </View>
-            <View style={styles.columnsContainer}>
-              <View style={styles.column}>
-                <ScrollView ref={parentScroll}>
-                  {data?.map((e, id) => (
-                    <TouchableOpacity
-                      style={
-                        book ===
+          </View>
+          <View style={styles.columnsContainer}>
+            <View style={styles.column}>
+              <ScrollView ref={parentScroll}>
+                {data?.map((e, id) => (
+                  <TouchableOpacity
+                    style={
+                      book ===
+                      e.headers.filter((p) => p.key === "bookCode")[0].value
+                        ? [
+                            { backgroundColor: "rgba(199, 197, 208, 1)" },
+                            styles.chipContainer,
+                          ]
+                        : [styles.chipContainer]
+                    }
+                    onPress={() =>
+                      setBook(
                         e.headers.filter((p) => p.key === "bookCode")[0].value
+                      )
+                    }
+                    key={id}
+                  >
+                    <View>
+                      <Text
+                        style={{ color: "rgba(73, 69, 79, 1)" }}
+                        variant="labelMedium"
+                      >
+                        {e.headers.filter((p) => p.key === "toc2")[0]?.value}
+                      </Text>
+                      <Text variant="bodyLarge">
+                        {e.headers.filter((p) => p.key === "bookCode")[0].value}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+            <Divider style={styles.divider} />
+            <View style={styles.column}>
+              <ScrollView>
+                {data
+                  ?.find(
+                    (e) =>
+                      e.headers.filter((p) => p.key === "bookCode")[0].value ===
+                      book
+                  )
+                  ?.cvIndexes.map((e, id) => (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setbookNav(book, e.chapter, 1);
+                        setVisible(false);
+                      }}
+                      style={
+                        chapter === e.chapter
                           ? [
                               { backgroundColor: "rgba(199, 197, 208, 1)" },
                               styles.chipContainer,
                             ]
                           : [styles.chipContainer]
                       }
-                      onPress={() =>
-                        setBook(
-                          e.headers.filter((p) => p.key === "bookCode")[0].value
-                        )
-                      }
                       key={id}
                     >
-                      <View>
-                        <Text
-                          style={{ color: "rgba(73, 69, 79, 1)" }}
-                          variant="labelMedium"
-                        >
-                          {e.headers.filter((p) => p.key === "toc2")[0]?.value}
-                        </Text>
-                        <Text variant="bodyLarge">
-                          {
-                            e.headers.filter((p) => p.key === "bookCode")[0]
-                              .value
-                          }
-                        </Text>
-                      </View>
+                      <Text variant="bodyLarge">{e.chapter}</Text>
                     </TouchableOpacity>
                   ))}
-                </ScrollView>
-              </View>
-              <Divider style={styles.divider} />
-              <View style={styles.column}>
-                <ScrollView>
-                  {data
-                    ?.find(
-                      (e) =>
-                        e.headers.filter((p) => p.key === "bookCode")[0]
-                          .value === book
-                    )
-                    ?.cvIndexes.map((e, id) => (
-                      <TouchableOpacity
-                        onPress={() => {
-                          setbookNav(book, e.chapter, 1);
-                          setVisible(false);
-                        }}
-                        style={
-                          chapter === e.chapter
-                            ? [
-                                { backgroundColor: "rgba(199, 197, 208, 1)" },
-                                styles.chipContainer,
-                              ]
-                            : [styles.chipContainer]
-                        }
-                        key={id}
-                      >
-                        <Text variant="bodyLarge">{e.chapter}</Text>
-                      </TouchableOpacity>
-                    ))}
-                </ScrollView>
-              </View>
-              {/* <Divider style={styles.divider} />
+              </ScrollView>
+            </View>
+            {/* <Divider style={styles.divider} />
             <View style={styles.column}>
               <ScrollView>
                 {data
@@ -191,10 +186,10 @@ export default function ModalTextNavigation({
                   ))}
               </ScrollView>
             </View> */}
-            </View>
           </View>
-        </Modal>
-      </Portal>
+        </View>
+      </Modal>
+    </Portal>
   );
 }
 
@@ -237,7 +232,7 @@ const styles = StyleSheet.create({
     height: 56,
     paddingLeft: 16,
     paddingRight: 24,
-    justifyContent: 'center'
+    justifyContent: "center",
   },
 });
 
@@ -246,8 +241,8 @@ async function getData(pk, docSetId) {
     docSet(id: "${docSetId}"){
       documents {
         headers{
-        key
-        value
+          key
+          value
         }
         cvIndexes {
           chapter
@@ -258,6 +253,12 @@ async function getData(pk, docSetId) {
       }
     }
   }`).data?.docSet?.documents;
+  
+  // Filter out 'GLO' and 'FRT' books
+  const filteredDocuments = documents.filter(doc => {
+    const bookCode = doc.headers.find(header => header.key === "bookCode").value;
+    return bookCode !== 'GLO' && bookCode !== 'FRT';
+  });
 
-  return documents;
+  return filteredDocuments;
 }

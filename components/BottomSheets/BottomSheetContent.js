@@ -42,7 +42,7 @@ export default function BottomSheetContent({
     optionContainerRadioButtons: {
       paddingHorizontal: 16,
       gap: 16,
-      flex:1,
+      flex: 1,
       alignItems: "center",
       flexDirection: "row",
     },
@@ -64,7 +64,12 @@ export default function BottomSheetContent({
   return (
     <View style={styles.optionContentContainer}>
       <View style={[styles.optionContainer, { height: 24 }]}>
-        <Text variant="titleMedium">{i18n.t("textOptionGreeting")}</Text>
+        <Text
+          style={{ color: colors.schemes[theme].onSurface }}
+          variant="titleMedium"
+        >
+          {i18n.t("textOptionGreeting")}
+        </Text>
       </View>
       {/* <View style={styles.optionContainer}>
         <Text style={{ alignSelf: "center" }} variant="bodyLarge">
@@ -74,8 +79,13 @@ export default function BottomSheetContent({
       </View> */}
 
       <View style={styles.optionContainerSlider}>
-        <Text variant="bodyLarge">Taille</Text>
-        <View style={{ flex:1, marginLeft: 32 }}>
+        <Text
+          style={{ color: colors.schemes[theme].onSurface }}
+          variant="bodyLarge"
+        >
+          Taille
+        </Text>
+        <View style={{ flex: 1, marginLeft: 32 }}>
           <Slider
             theme={{
               maximumTrackTintColor: "rgba(223, 224, 255, 1)",
@@ -126,7 +136,14 @@ export default function BottomSheetContent({
         </View>
       </View>
       <View style={styles.optionContainer}>
-        <Text variant="bodyLarge" style={{ width: 50, alignSelf: "center" }}>
+        <Text
+          variant="bodyLarge"
+          style={{
+            width: 50,
+            alignSelf: "center",
+            color: colors.schemes[theme].onSurface,
+          }}
+        >
           {i18n.t("style")}
         </Text>
         <TouchableOpacity
@@ -134,12 +151,16 @@ export default function BottomSheetContent({
           style={styles.optionContainerRadioButtons}
         >
           <RadioButton
-            style={{ backgroundColor: colors.schemes[theme].primary }}
             value="format"
             status={bibleFormat === "format" ? "checked" : "unchecked"}
             onPress={() => setBibleFormat("format")}
           />
-          <Text variant="bodyLarge">{i18n.t("formatBible")}</Text>
+          <Text
+            style={{ color: colors.schemes[theme].onSurface }}
+            variant="bodyLarge"
+          >
+            {i18n.t("formatBible")}
+          </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.optionContainer}>
@@ -152,7 +173,12 @@ export default function BottomSheetContent({
             status={bibleFormat === "byVerse" ? "checked" : "unchecked"}
             onPress={() => setBibleFormat("byVerse")}
           />
-          <Text variant="bodyLarge">{i18n.t("formatBibleVerse")}</Text>
+          <Text
+            style={{ color: colors.schemes[theme].onSurface }}
+            variant="bodyLarge"
+          >
+            {i18n.t("formatBibleVerse")}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -6,7 +6,8 @@ import {Appearance} from 'react-native';
 const ColorThemeContext = createContext();
 
 const ColorThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(Appearance.getColorScheme());
+  const [theme, setTheme] = useState('dark');
+  // Appearance.getColorScheme()
   const colors = {
     description:
       "TYPE: CUSTOM\nMaterial Theme Builder export 2024-03-29 04:39:11",

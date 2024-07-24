@@ -15,6 +15,7 @@ export function ReadingScreenAllBook({
   documentResult,
   bibleFormat,
 }) {
+  console.log(fontSize)
   const [chapterBuffer, setChapterBuffer] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { colors, theme } = useContext(ColorThemeContext);

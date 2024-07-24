@@ -6,9 +6,9 @@ import {
 } from "./renderStyles";
 import { StyleSheet } from "react-native";
 import { Table, Cell, TableWrapper } from "react-native-reanimated-table";
-import { Text,Divider } from "react-native-paper";
+import { Text, Divider } from "react-native-paper";
 
-function getStyles(type, subType, indexForStyle,fontFamily=null) {
+function getStyles(type, subType, indexForStyle, fontFamily = null) {
   if (!rs[type]) {
     throw new Error(`Unknown style type '${type}'`);
   }
@@ -16,7 +16,6 @@ function getStyles(type, subType, indexForStyle,fontFamily=null) {
     return ConvertCssToReactNativeStyleOnFloor(rs[type].default, 0);
   }
   if (indexForStyle) {
-  
     return ConvertCssToReactNativeStyleOnFloor(
       rs[type][subType],
       indexForStyle,
@@ -73,11 +72,9 @@ function InlineElement(props) {
 }
 
 const renderers = {
-    divider:()=>{
-        return <View style={{  height: 1,
-            width: "100%",}} />
-
-    },
+  divider: () => {
+    return <View style={{ height: 1, width: "100%" }} />;
+  },
   text: ({ word, idWord, workspace, fontConfig }) => {
     if (fontConfig && fontConfig.fontFamily != "default") {
       return (
@@ -88,7 +85,7 @@ const renderers = {
               ...ConvertCssToReactNativeStyleOnFloor(
                 { fontSize: "medium" },
                 parseInt(fontConfig.fontSize),
-               fontConfig.fontFamily
+                fontConfig.fontFamily
               ),
             }}
           >
@@ -104,17 +101,17 @@ const renderers = {
     );
   },
   chapter_label: (number, id, fontConfig) => (
-    <View
-      onPress={() => {
-        console.log("chapter label?");
-      }}
-      key={`chapter_label_${id}`}
-    >
+    <View onPress={() => {}} key={`chapter_label_${id}`}>
       <Text
         style={[
           {
             alignSelf: "flex-start",
-            ...getStyles("marks", "chapter_label", fontConfig.fontSize,fontConfig.fontFamily),
+            ...getStyles(
+              "marks",
+              "chapter_label",
+              fontConfig.fontSize,
+              fontConfig.fontFamily
+            ),
           },
         ]}
       >
@@ -135,9 +132,14 @@ const renderers = {
           <Text
             key={`verse_label${id}`}
             style={{
-              ...getStyles("marks", "verses_label", fontConfig.fontSize,fontConfig.fontFamily),
-            //   color: "#00D",
-            //   textDecorationLine: "underline",
+              ...getStyles(
+                "marks",
+                "verses_label",
+                fontConfig.fontSize,
+                fontConfig.fontFamily
+              ),
+              //   color: "#00D",
+              //   textDecorationLine: "underline",
             }}
           >
             {number}
@@ -166,7 +168,7 @@ const renderers = {
   },
   paragraph: (subType, content, footnoteNo, id, fontConfig) => {
     let TitleContent = {};
-   
+
     if (["usfm:mt", "usfm:s"].includes(subType)) {
       const updatedContent = content.map((element, index) => {
         const updatedChildren = React.Children.map(
@@ -174,7 +176,12 @@ const renderers = {
           (child, childIndex) => {
             return React.cloneElement(child, {
               style: {
-                ...getStyles("paras", subType, fontConfig.fontSize,fontConfig.fontFamily),
+                ...getStyles(
+                  "paras",
+                  subType,
+                  fontConfig.fontSize,
+                  fontConfig.fontFamily
+                ),
                 display: "flex",
                 flexDirection: "row",
               },

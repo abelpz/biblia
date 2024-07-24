@@ -15,7 +15,7 @@ export default function SplashScreenXenizo() {
       }}
     >
       <Image
-        source={require("../app/assets/icons/SplashScreen/Icon2.png")}
+        source={require("../assets/icons/SplashScreen/Icon2.png")}
       />
       <ActivityIndicator size={'large'}/>
     </View>

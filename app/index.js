@@ -26,15 +26,15 @@ export default function IndexScreen() {
     // 'Andika-Bold': require('../assets/fonts/Andika/Andika-Bold.ttf'),
     // 'Andika-BoldItalic': require('../assets/fonts/Andika/Andika-BoldItalic.ttf'),
     // 'Andika-BoldItalic': require('../assets/fonts/Andika/Andika-Regular.ttf'),
-    'NotoSans':require('./assets/fonts/Noto/NotoSans-Regular.ttf'),
-    'NotoSans-Regular':require('./assets/fonts/Noto/NotoSans-Regular.ttf'),
-    'NotoSans-Medium':require('./assets/fonts/Noto/NotoSans-Medium.ttf'),
+    'NotoSans':require('../assets/fonts/Noto/NotoSans-Regular.ttf'),
+    'NotoSans-Regular':require('../assets/fonts/Noto/NotoSans-Regular.ttf'),
+    'NotoSans-Medium':require('../assets/fonts/Noto/NotoSans-Medium.ttf'),
 
   });
 
   useEffect(() => {
     if (!isReady) {
-      const psle = require("./assets/Succinct/psle_succinctTest.json");
+      const psle = require("../assets/Succinct/psle_succinctTest.json");
       Object.keys(psle).map(k => {pk.loadSuccinctDocSet(psle[k].content)})
       // psle.map(e => pk.loadSuccinctDocSets(e))
 
@@ -45,10 +45,13 @@ export default function IndexScreen() {
   }, []);
 
   useEffect(() => {
-    if (isReady) {
-      router.push("/test");
+    if(fontsLoaded){
+      if (isReady) {
+        router.push("/test");
+      }
     }
-  }, [isReady]);
+
+  }, [isReady,fontsLoaded]);
 
   if (!isReady) {
     return (

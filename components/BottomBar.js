@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { IconButton, Text, ActivityIndicator } from "react-native-paper";
-import ArrowDownIcon from "../app/assets/icons/flavorIcons/arrowDown";
-import ArrowUpIcon from "../app/assets/icons/flavorIcons/arrowUp";
-import ArrowRightGreyIcon from "../app/assets/icons/flavorIcons/ArrowRightGreyIcon";
-import ArrowLeftGreyIcon from "../app/assets/icons/flavorIcons/arrowGreyLeft";
+import ArrowDownIcon from "../assets/icons/flavorIcons/arrowDown";
+import ArrowUpIcon from "../assets/icons/flavorIcons/arrowUp";
+import ArrowRightGreyIcon from "../assets/icons/flavorIcons/ArrowRightGreyIcon";
+import ArrowLeftGreyIcon from "../assets/icons/flavorIcons/arrowGreyLeft";
 import { useContext } from "react";
 import { ColorThemeContext } from "../context/colorThemeContext";
 import { TouchableRipple } from "react-native-paper";
 export default function BottomBar({
   currentBook,
-  setCurrentChap,
+  handleNextChap,
+  handlePreviousChap,
   currentChap,
-  maxChap,
   documentResult,
   isModalVisible,
+  isLastOfLastBook,
+  isFirstOfFirstBook,
   setIsModalVisible,
 }) {
   const { colors, theme } = useContext(ColorThemeContext);
@@ -76,17 +78,11 @@ export default function BottomBar({
                   margin: 0,
                 }}
                 onPress={() => {
-                  setCurrentChap((prev) => {
-                    if (prev >= 2) {
-                      return prev - 1;
-                    } else {
-                      return prev;
-                    }
-                  });
+                  handlePreviousChap();
                 }}
                 icon={() => (
                   <ArrowLeftGreyIcon
-                    color={currentChap === 1 ? "grey" : "black"}
+                    color={isFirstOfFirstBook ? "grey" : "black"}
                     width={18}
                     height={18}
                   />
@@ -107,17 +103,16 @@ export default function BottomBar({
             >
               <View style={styles.customButton}>
                 <View style={styles.buttonInnerContent}>
-                <Text variant="labelLarge">
-                  {currentBook} {currentChap}
-                </Text>
-                {isModalVisible ? (
-                  <ArrowUpIcon width={18} height={18} />
-                ) : (
-                  <ArrowDownIcon width={18} height={18} />
-                )}
-              </View>
+                  <Text variant="labelLarge">
+                    {currentBook} {currentChap}
+                  </Text>
+                  {isModalVisible ? (
+                    <ArrowUpIcon width={18} height={18} />
+                  ) : (
+                    <ArrowDownIcon width={18} height={18} />
+                  )}
                 </View>
-              
+              </View>
             </TouchableRipple>
             <View
               style={{
@@ -137,20 +132,14 @@ export default function BottomBar({
                 }}
                 icon={() => (
                   <ArrowRightGreyIcon
-                    color={currentChap === maxChap ? "grey" : "black"}
+                    color={isLastOfLastBook ? "grey" : "black"}
                     style={{ margin: 8 }}
                     width={24}
                     height={24}
                   />
                 )}
                 onPress={() => {
-                  setCurrentChap((prev) => {
-                    if (prev < documentResult.data.document.cvIndexes.length) {
-                      return prev + 1;
-                    } else {
-                      return prev;
-                    }
-                  });
+                  handleNextChap();
                 }}
               />
             </View>
@@ -162,3 +151,4 @@ export default function BottomBar({
     </View>
   );
 }
+

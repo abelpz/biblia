@@ -71,6 +71,7 @@ export default function AddResourcesIcon({ color = "black" }) {
             fill="white"
           />
         </mask>
+
         <g mask="url(#mask1_2069_9620)">
           <path
             id="book_2_2"
