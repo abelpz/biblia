@@ -12,7 +12,11 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  StatusBar,
+  Platform,
+  NativeModules,
 } from "react-native";
+import { Appearance } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ProskommaContext } from "../context/proskommaContext";
@@ -28,6 +32,7 @@ import { Button } from "react-native-paper";
 import { ColorThemeContext } from "../context/colorThemeContext";
 import BottomSheetIntroInfo from "../components/BottomSheets/BottomSheetIntroInfo";
 import { BackHandler } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 // import RNExitApp from 'react-native-exit-app';
 
 const Test = () => {
@@ -36,6 +41,7 @@ const Test = () => {
 
   const { pk } = useContext(ProskommaContext);
   const { colors, theme } = useContext(ColorThemeContext);
+  const { StatusBarManager } = NativeModules;
 
   const bottomSheetRef = useRef(null);
   const bottomSheetIntroInfoRef = useRef(null);
@@ -116,14 +122,12 @@ const Test = () => {
       handleBottomSheetIntroInfoClose();
       handleBottomSheetClose();
       return true; // Prevent default behavior
-    }
-    else{
+    } else {
       // RNExitApp.exitApp();
       //put app in the background go to main page of phone
-      return true
+      return true;
     }
   };
-
 
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -134,6 +138,7 @@ const Test = () => {
     return () => backHandler.remove();
   }, [isBottomSheetOpen]);
   const handleBottomSheetIntroInfoOpen = useCallback(() => {
+    handleBottomSheetClose();
     setIsBottomSheetOpen(true);
     bottomSheetIntroInfoRef.current.snapToIndex(0);
   }, []);
@@ -144,6 +149,7 @@ const Test = () => {
   }, []);
 
   const handleBottomSheetOpen = useCallback(() => {
+    handleBottomSheetIntroInfoClose();
     setIsBottomSheetOpen(true);
     bottomSheetRef.current.snapToIndex(0);
   }, []);
@@ -160,12 +166,12 @@ const Test = () => {
 
   const styles = StyleSheet.create({
     overlay: {
+      backgroundColor: "rgba(0,0,0,0.12)",
       position: "absolute",
       height: "100%",
       width: "100%",
       left: 0,
       top: 0,
-      opacity: 0,
     },
     container: {
       flex: 1,
@@ -174,7 +180,7 @@ const Test = () => {
       marginHorizontal: 0,
       borderTopLeftRadius: 28,
       borderTopRightRadius: 28,
-      backgroundColor:colors.schemes[theme].surface,
+      backgroundColor: colors.schemes[theme].surface,
     },
     handlerStyleContainer: {
       padding: 16,
@@ -187,43 +193,87 @@ const Test = () => {
   });
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <TopBarForText
-        isOnTop={isOnTop}
-        functionTitle={setDocSetId}
-        functionParamText={handleBottomSheetOpen}
-        functionInfo={handleBottomSheetIntroInfoOpen}
-      >
-        <PaperProvider>
-          <ReadingScreenAllBook
-            setIsOnTop={setIsOnTop}
-            documentResult={documentResult}
-            pk={pk}
-            fontSize={fontSize}
+    <SafeAreaView
+      style={{
+        flex: 1,
+      }}
+    >
+      <GestureHandlerRootView style={styles.container}>
+        <StatusBar
+        barStyle={Appearance.getColorScheme()}
+          style={{
+            paddingTop: Platform.OS === "android" ? StatusBarManager.HEIGHT : 0,
+          }}
+          backgroundColor={colors.schemes[theme].surface}
+        />
+        <TopBarForText
+          isOnTop={isOnTop}
+          functionTitle={setDocSetId}
+          functionParamText={handleBottomSheetOpen}
+          functionInfo={handleBottomSheetIntroInfoOpen}
+        >
+          <PaperProvider>
+            <ReadingScreenAllBook
+              setIsOnTop={setIsOnTop}
+              documentResult={documentResult}
+              pk={pk}
+              fontSize={fontSize}
+              currentChap={currentChap}
+              fontFamily={fontFamily}
+              bibleFormat={bibleFormat}
+            />
+            <ModalTextNavigation
+              setbookNav={handleModalTextNavigation}
+              currentBook={currentBook}
+              currentChap={currentChap}
+              setVisible={setIsModalVisible}
+              visible={isModalVisible}
+              docSetId={docSetId}
+            />
+          </PaperProvider>
+          <BottomBar
+            currentBook={currentBook}
             currentChap={currentChap}
-            fontFamily={fontFamily}
+            documentResult={documentResult}
+            setCurrentChap={setCurrentChap}
+            isModalVisible={isModalVisible}
+            handlePreviousChap={handlePreviousChap}
+            handleNextChap={handleNextChap}
+            isFirstOfFirstBook={isFirstOfFirstBook}
+            isLastOfLastBook={isLastOfLastBook}
+            setIsModalVisible={setIsModalVisible}
+          />
+        </TopBarForText>
+
+        {isBottomSheetOpen && (
+          <TouchableWithoutFeedback
+            onPress={() => {
+              handleBottomSheetClose();
+              handleBottomSheetIntroInfoClose();
+            }}
+          >
+            <View style={styles.overlay} />
+          </TouchableWithoutFeedback>
+        )}
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={-1}
+          snapPoints={snapPoints}
+          enablePanDownToClose={true}
+          enableContentPanningGesture={false}
+          onClose={handleBottomSheetClose}
+          enableHandlePanningGesture={true}
+          handleStyle={styles.handlerStyleContainer}
+          handleIndicatorStyle={styles.handlerStyle}
+          backgroundStyle={styles.bottomSheet}
+        >
+          <BottomSheetContent
+            setFontFamily={setFontFamily}
+            setFontSize={setFontSize}
+            setBibleFormat={setBibleFormat}
             bibleFormat={bibleFormat}
           />
-          <ModalTextNavigation
-            setbookNav={handleModalTextNavigation}
-            currentBook={currentBook}
-            setVisible={setIsModalVisible}
-            visible={isModalVisible}
-            docSetId={docSetId}
-          />
-        </PaperProvider>
-        <BottomBar
-          currentBook={currentBook}
-          currentChap={currentChap}
-          documentResult={documentResult}
-          setCurrentChap={setCurrentChap}
-          isModalVisible={isModalVisible}
-          handlePreviousChap={handlePreviousChap}
-          handleNextChap={handleNextChap}
-          isFirstOfFirstBook={isFirstOfFirstBook}
-          isLastOfLastBook={isLastOfLastBook}
-          setIsModalVisible={setIsModalVisible}
-        />
+        </BottomSheet>
         <BottomSheet
           ref={bottomSheetIntroInfoRef}
           index={-1}
@@ -239,33 +289,8 @@ const Test = () => {
         >
           <BottomSheetIntroInfo docSetId={docSetId} />
         </BottomSheet>
-      </TopBarForText>
-
-      {isBottomSheetOpen && (
-        <TouchableWithoutFeedback onPress={handleBottomSheetClose}>
-          <View style={styles.overlay} />
-        </TouchableWithoutFeedback>
-      )}
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={-1}
-        snapPoints={snapPoints}
-        enablePanDownToClose={true}
-        enableContentPanningGesture={false}
-        onClose={handleBottomSheetClose}
-        enableHandlePanningGesture={true}
-        handleStyle={styles.handlerStyleContainer}
-        handleIndicatorStyle={styles.handlerStyle}
-        backgroundStyle={styles.bottomSheet}
-      >
-        <BottomSheetContent
-          setFontFamily={setFontFamily}
-          setFontSize={setFontSize}
-          setBibleFormat={setBibleFormat}
-          bibleFormat={bibleFormat}
-        />
-      </BottomSheet>
-    </GestureHandlerRootView>
+      </GestureHandlerRootView>
+    </SafeAreaView>
   );
 };
 

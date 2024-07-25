@@ -12,21 +12,30 @@ function getStyles(type, subType, indexForStyle, fontFamily = null) {
   if (!rs[type]) {
     throw new Error(`Unknown style type '${type}'`);
   }
-  if (!rs[type][subType]) {
-    return ConvertCssToReactNativeStyleOnFloor(rs[type].default, 0);
-  }
-  if (indexForStyle) {
+  
+  if (indexForStyle && fontFamily) {
     return ConvertCssToReactNativeStyleOnFloor(
       rs[type][subType],
       indexForStyle,
       fontFamily
     );
   }
-  return ConvertCssToReactNativeStyleOnFloor(rs[type].default, 2);
+  if(!rs[type][subType]){
+    console.log(`Unknown style type '${subType}'`);
+    return ConvertCssToReactNativeStyleOnFloor(rs[type]['usfm:p']);
+
+  }
+  return ConvertCssToReactNativeStyleOnFloor(rs[type][subType]);
 }
 
 function InlineElement(props) {
   const [display, setDisplay] = useState(false);
+  const color = props.fontConfig?.fontColor?.fontText
+    ? props.fontConfig.fontColor.fontText
+    : "black";
+  const backgroundColor = props.fontConfig?.fontColor?.surfaceVariant
+    ? props.fontConfig.fontColor.surfaceVariant
+    : "#CCC";
   const toggleDisplay = () => setDisplay(!display);
   if (display) {
     return (
@@ -37,7 +46,8 @@ function InlineElement(props) {
           marginRight: "10%",
           marginTop: "5%",
           marginBottom: "5%",
-          backgroundColor: "#CCC",
+          backgroundColor: backgroundColor,
+          color: color,
           marginBottom: 16,
           borderWidth: 1,
           borderRadius: 4,
@@ -61,7 +71,8 @@ function InlineElement(props) {
           marginLeft: 4,
           marginTop: 15,
           padding: 2,
-          backgroundColor: "#CCC",
+          color: color,
+          backgroundColor: backgroundColor,
         }}
         onPress={toggleDisplay}
       >
@@ -77,6 +88,10 @@ const renderers = {
   },
   text: ({ word, idWord, workspace, fontConfig }) => {
     if (fontConfig && fontConfig.fontFamily != "default") {
+      const color = fontConfig.fontColor
+        ? fontConfig.fontColor.fontText
+        : "black";
+
       return (
         <View key={idWord} style={{}}>
           <Text
@@ -85,8 +100,10 @@ const renderers = {
               ...ConvertCssToReactNativeStyleOnFloor(
                 { fontSize: "medium" },
                 parseInt(fontConfig.fontSize),
-                fontConfig.fontFamily
+                fontConfig.fontFamily,
               ),
+              color:color,
+
             }}
           >
             {word}
@@ -100,26 +117,37 @@ const renderers = {
       </View>
     );
   },
-  chapter_label: (number, id, fontConfig) => (
-    <View onPress={() => {}} key={`chapter_label_${id}`}>
-      <Text
-        style={[
-          {
-            alignSelf: "flex-start",
-            ...getStyles(
-              "marks",
-              "chapter_label",
-              fontConfig.fontSize,
-              fontConfig.fontFamily
-            ),
-          },
-        ]}
-      >
-        {number}
-      </Text>
-    </View>
-  ),
+  chapter_label: (number, id, fontConfig) => {
+    const color = fontConfig?.fontColor
+      ? fontConfig.fontColor.fontChap
+      : "black";
+
+    return (
+      <View onPress={() => {}} key={`chapter_label_${id}`}>
+        <Text
+          style={[
+            {
+              color: color,
+              alignSelf: "flex-start",
+              ...getStyles(
+                "marks",
+                "chapter_label",
+                fontConfig.fontSize,
+                fontConfig.fontFamily
+              ),
+            },
+          ]}
+        >
+          {number}
+        </Text>
+      </View>
+    );
+  },
   verses_label: (number, bcv, bcvCallback, id, fontConfig) => {
+    const color = fontConfig?.fontColor
+      ? fontConfig.fontColor.fontVerse
+      : "black";
+
     if (bcv && bcv.length === 3) {
       return (
         <TouchableOpacity
@@ -132,6 +160,7 @@ const renderers = {
           <Text
             key={`verse_label${id}`}
             style={{
+              color: color,
               ...getStyles(
                 "marks",
                 "verses_label",
@@ -168,8 +197,31 @@ const renderers = {
   },
   paragraph: (subType, content, footnoteNo, id, fontConfig) => {
     let TitleContent = {};
+    const color = fontConfig?.fontColor
+      ? fontConfig.fontColor.fontText
+      : "black";
 
-    if (["usfm:mt", "usfm:s"].includes(subType)) {
+    const tableIsViewText = [
+      "usfm:mt",
+      "usfm:mt2",
+      "usfm:mt3",
+      "usfm:mt4",
+      "usfm:s",
+      "usfm:s2",
+      "usfm:s3",
+      "usfm:s4",
+      "usfm:imt",
+      "usfm:imt2",
+      "usfm:imt3",
+      "usfm:imt4",
+      "usfm:is",
+      "usfm:is2",
+      "usfm:is3",
+      "usfm:is4",
+    ];
+
+
+    if (tableIsViewText.includes(subType)) {
       const updatedContent = content.map((element, index) => {
         const updatedChildren = React.Children.map(
           element.props.children,
@@ -184,6 +236,8 @@ const renderers = {
                 ),
                 display: "flex",
                 flexDirection: "row",
+                color: color,
+                marginVertical:8,
               },
               key: `title_subTitle_${index}_${childIndex}`,
             });
@@ -197,15 +251,17 @@ const renderers = {
       });
       TitleContent = updatedContent;
     }
+
     return ["usfm:f", "usfm:x"].includes(subType) ? (
       <InlineElement
+        fontConfig={fontConfig}
         key={`paragraph_${id}`}
-        style={getStyles("paras", subType, fontConfig.fontSize)}
+        style={[getStyles("paras", subType, fontConfig.fontSize)]}
         linkText={subType === "usfm:f" ? `${footnoteNo}` : "*"}
       >
         {content}
       </InlineElement>
-    ) : ["usfm:mt", "usfm:s"].includes(subType) ? (
+    ) : tableIsViewText.includes(subType) ? (
       <View
         key={`paraphraphe_${id} `}
         style={{
@@ -225,6 +281,8 @@ const renderers = {
           alignItems: "flex-end",
           flexWrap: "wrap",
           flexDirection: "row",
+          marginBottom:['usfm:q','usfm:q2','usfm:q3'].includes(subType)?0:8,
+
         }}
       >
         {content}

@@ -11,6 +11,7 @@ import {
   useLayoutEffect,
 } from "react";
 import { ProskommaContext } from "../../context/proskommaContext";
+import { ColorThemeContext } from "../../context/colorThemeContext";
 
 export default function ModalTextNavigation({
   currentBook,
@@ -20,16 +21,23 @@ export default function ModalTextNavigation({
   setbookNav,
   docSetId,
 }) {
+  const { colors, theme } = useContext(ColorThemeContext);
   const { pk } = useContext(ProskommaContext);
   const [book, setBook] = useState(currentBook);
   const [chapter, setChapter] = useState(currentChap);
   // const [verse, setVerse] = useState(1);
   const [data, setData] = useState(null);
   const [pixelNavBook, setPixelNavBook] = useState(0);
+  const [pixelNavCha, setPixelNavChap] = useState(0);
   const parentScroll = useRef(null);
+  const chapterScroll = useRef(null);
+  useEffect(() => {
+    setChapter(currentChap);
+  }, [currentChap]);
   const { i18n } = useContext(I18nContext);
-
-  useEffect(()=>{setBook(currentBook)},[currentBook])
+  useEffect(() => {
+    setBook(currentBook);
+  }, [currentBook]);
 
   useEffect(() => {
     async function fetchData() {
@@ -44,8 +52,14 @@ export default function ModalTextNavigation({
       const bookIndex = data.findIndex((e) =>
         e.headers.some((p) => p.key === "bookCode" && p.value === book)
       );
-      if (bookIndex !== -1) {
+      const chapIndex = data[bookIndex].cvIndexes.findIndex(
+        (e) => e.chapter === currentChap
+      );
+      if (bookIndex > -1) {
         setPixelNavBook(bookIndex * 56);
+      }
+      if (chapIndex > -1) {
+        setPixelNavChap(chapIndex * 56);
       }
     }
   }, [data]);
@@ -55,17 +69,31 @@ export default function ModalTextNavigation({
       parentScroll.current.scrollTo({ x: 0, y: pixelNavBook, animated: true });
     }
   }, [visible]);
+
+  useEffect(() => {
+    if (chapterScroll.current) {
+      chapterScroll.current.scrollTo({ x: 0, y: pixelNavCha, animated: true });
+    }
+  }, [visible]);
   return (
     <Portal>
       <Modal
         onDismiss={() => setVisible(false)}
         visible={visible}
         style={{ marginTop: 0 }}
-        contentContainerStyle={styles.container}
+        contentContainerStyle={[
+          styles.container,
+          { backgroundColor: colors.schemes[theme].surfaceContainerHigh },
+        ]}
       >
         <View style={{ flex: 1 }}>
           <View style={styles.title}>
-            <Text variant="headlineSmall">{i18n.t("navigateTo")}</Text>
+            <Text
+              style={{ color: colors.schemes[theme].onSurface }}
+              variant="headlineSmall"
+            >
+              {i18n.t("navigateTo")}
+            </Text>
           </View>
           <View
             style={{
@@ -75,12 +103,24 @@ export default function ModalTextNavigation({
             }}
           >
             <View style={styles.columnTitle}>
-              <Text style={styles.columnTitleText} variant="bodyMedium">
+              <Text
+                style={[
+                  styles.columnTitleText,
+                  { color: colors.schemes[theme].onSurfaceVariant },
+                ]}
+                variant="bodyMedium"
+              >
                 {i18n.t("book")}
               </Text>
             </View>
             <View style={styles.columnTitle}>
-              <Text style={styles.columnTitleText} variant="bodyMedium">
+              <Text
+                style={[
+                  styles.columnTitleText,
+                  { color: colors.schemes[theme].onSurfaceVariant },
+                ]}
+                variant="bodyMedium"
+              >
                 {i18n.t("chapter")}
               </Text>
             </View>
@@ -100,7 +140,10 @@ export default function ModalTextNavigation({
                       book ===
                       e.headers.filter((p) => p.key === "bookCode")[0].value
                         ? [
-                            { backgroundColor: "rgba(199, 197, 208, 1)" },
+                            {
+                              backgroundColor:
+                                colors.stateLayers[theme].onSurface.opacity012,
+                            },
                             styles.chipContainer,
                           ]
                         : [styles.chipContainer]
@@ -114,12 +157,19 @@ export default function ModalTextNavigation({
                   >
                     <View>
                       <Text
-                        style={{ color: "rgba(73, 69, 79, 1)" }}
+                        style={{
+                          color: colors.schemes[theme].onSurfaceVariant,
+                        }}
                         variant="labelMedium"
                       >
                         {e.headers.filter((p) => p.key === "toc2")[0]?.value}
                       </Text>
-                      <Text variant="bodyLarge">
+                      <Text
+                        style={{
+                          color: colors.schemes[theme].onSurface,
+                        }}
+                        variant="bodyLarge"
+                      >
                         {e.headers.filter((p) => p.key === "bookCode")[0].value}
                       </Text>
                     </View>
@@ -127,9 +177,16 @@ export default function ModalTextNavigation({
                 ))}
               </ScrollView>
             </View>
-            <Divider style={styles.divider} />
+            <Divider
+              style={[
+                styles.divider,
+                { color: colors.schemes[theme].outlineVariant },
+              ]}
+            />
             <View style={styles.column}>
-              <ScrollView>
+              <ScrollView ref={chapterScroll}
+              showsHorizontalScrollIndicator={true}
+              >
                 {data
                   ?.find(
                     (e) =>
@@ -145,14 +202,25 @@ export default function ModalTextNavigation({
                       style={
                         chapter === e.chapter
                           ? [
-                              { backgroundColor: "rgba(199, 197, 208, 1)" },
+                              {
+                                backgroundColor:
+                                  colors.stateLayers[theme].onSurface
+                                    .opacity012,
+                              },
                               styles.chipContainer,
                             ]
                           : [styles.chipContainer]
                       }
                       key={id}
                     >
-                      <Text variant="bodyLarge">{e.chapter}</Text>
+                      <Text
+                        style={{
+                          color: colors.schemes[theme].onSurface,
+                        }}
+                        variant="bodyLarge"
+                      >
+                        {e.chapter}
+                      </Text>
                     </TouchableOpacity>
                   ))}
               </ScrollView>
@@ -201,7 +269,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 18,
     marginVertical: 4,
     margin: 0,
-    backgroundColor: "rgba(234, 231, 239, 1)",
     borderRadius: 28,
   },
   title: {
@@ -253,11 +320,13 @@ async function getData(pk, docSetId) {
       }
     }
   }`).data?.docSet?.documents;
-  
+
   // Filter out 'GLO' and 'FRT' books
-  const filteredDocuments = documents.filter(doc => {
-    const bookCode = doc.headers.find(header => header.key === "bookCode").value;
-    return bookCode !== 'GLO' && bookCode !== 'FRT';
+  const filteredDocuments = documents.filter((doc) => {
+    const bookCode = doc.headers.find(
+      (header) => header.key === "bookCode"
+    ).value;
+    return bookCode !== "GLO" && bookCode !== "FRT";
   });
 
   return filteredDocuments;

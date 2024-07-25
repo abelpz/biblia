@@ -1,25 +1,58 @@
 {
   "expo": {
+    "userInterfaceStyle": "automatic",
     "name": "Sunteleo",
     "slug": "k2",
     "owner": "xenizo",
-    "version": "1.0.0",
+    "version": "0.1.0",
+    "scheme": "Sunteleo",
     "platforms": ["ios", "android"],
     "splash": {
-      "image": "./assets/icons/SplashScreen/IconSplash.png",
-      "backgroundColor": "#DFE0FF",
-      "resizeMode": "contain"
-    },
-    "ios": {
-      "bundleIdentifier": "com.xenizo.sunalizo"
-    },
+        "image": "./assets/icons/SplashScreen/IconSplash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#DFE0FF",
+        "dark": {
+          "image": "./assets/icons/SplashScreen/IconSplasDark.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#232B65"
+        }
+      },
     "android": {
-      "package": "com.xenizo.sunalizo"
+      "package": "com.xenizo.sunalizo",
+      "splash": {
+        "image": "./assets/icons/SplashScreen/IconSplash.png",
+        "resizeMode": "contain" ,
+        "backgroundColor": "#DFE0FF",
+        "dark": {
+          "image": "./assets/icons/SplashScreen/IconSplasDark.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#232B65"
+        }
+      }
     },
+
+    "ios": {
+      "bundleIdentifier": "com.xenizo.sunalizo",
+
+      "splash": {
+        "image": "./assets/icons/SplashScreen/IconSplash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#DFE0FF",
+        "dark": {
+          "image": "./assets/icons/SplashScreen/IconSplasDark.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#232B65"
+        }
+      }
+    },
+
     "extra": {
       "eas": {
         "projectId": "3fdc3cf5-eacb-4cfb-8c75-364205249ba2"
       }
-    }
+    },
+    "runtimeVersion": "0.0.1"
+
   }
+  
 }

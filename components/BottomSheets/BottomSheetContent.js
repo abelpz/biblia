@@ -88,8 +88,8 @@ export default function BottomSheetContent({
         <View style={{ flex: 1, marginLeft: 32 }}>
           <Slider
             theme={{
-              maximumTrackTintColor: "rgba(223, 224, 255, 1)",
-              minimumTrackTintColor: "rgba(223, 224, 255, 1)",
+              maximumTrackTintColor: colors.schemes[theme].primaryContainer,
+              minimumTrackTintColor: colors.schemes[theme].primaryContainer,
             }}
             onSlidingComplete={(e) => setFontSize(correspondanceTable[e])}
             renderMark={() => (
@@ -105,7 +105,7 @@ export default function BottomSheetContent({
             renderThumb={() => (
               <View
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: colors.schemes[theme].surface,
                   height: 32,
                   width: 20,
                   alignItems: "center",
@@ -152,6 +152,11 @@ export default function BottomSheetContent({
         >
           <RadioButton
             value="format"
+            color={
+              bibleFormat === "format"
+                ? colors.schemes[theme].primary
+                : colors.schemes[theme].onSurfaceVariant
+            }
             status={bibleFormat === "format" ? "checked" : "unchecked"}
             onPress={() => setBibleFormat("format")}
           />
@@ -170,6 +175,11 @@ export default function BottomSheetContent({
         >
           <RadioButton
             value="byVerse"
+            color={
+              bibleFormat === "byVerse"
+                ? colors.schemes[theme].primary
+                : colors.schemes[theme].onSurfaceVariant
+            }
             status={bibleFormat === "byVerse" ? "checked" : "unchecked"}
             onPress={() => setBibleFormat("byVerse")}
           />

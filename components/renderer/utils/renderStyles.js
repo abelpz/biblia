@@ -2,8 +2,8 @@ const renderStyles = {
   paras: {
     default: {
       fontSize: "medium",
-      marginTop: 0.5,
-      marginBottom: 0.5,
+      marginTop: "0.5em",
+      marginBottom:" 0.5em",
     },
     "usfm:b": {
       height: "1em",
@@ -18,16 +18,22 @@ const renderStyles = {
     "usfm:imt": {
       fontWeight: "bold",
       fontStyle: "italic",
-      fontSize: "xx-large",
+      fontSize: "xxx-large",
       textAlign: "center",
     },
     "usfm:imt2": {
       fontWeight: "bold",
       fontStyle: "italic",
-      fontSize: "x-large",
+      fontSize: "xx-large",
       textAlign: "center",
     },
     "usfm:imt3": {
+      fontWeight: "bold",
+      fontStyle: "italic",
+      fontSize: "x-large",
+      textAlign: "center",
+    },
+    "usfm:imt4": {
       fontWeight: "bold",
       fontStyle: "italic",
       fontSize: "large",
@@ -50,11 +56,11 @@ const renderStyles = {
     },
     "usfm:is": {
       fontStyle: "italic",
-      fontSize: "xx-large",
+      fontSize: "x-large",
     },
     "usfm:is2": {
       fontStyle: "italic",
-      fontSize: "x-large",
+      fontSize: "large",
     },
     "usfm:is3": {
       fontStyle: "italic",
@@ -75,7 +81,8 @@ const renderStyles = {
       paddingLeft: "6em",
       textIndent: "-1.5em",
     },
-    "usfm:m": {},
+    "usfm:m": { 
+    },
     "usfm:mi": {
       paddingLeft: "1.5em",
     },
@@ -84,33 +91,47 @@ const renderStyles = {
       fontStyle: "italic",
     },
     "usfm:ms": {
-      fontSize: "large",
+      fontSize: "xx-large",
       fontWeight: "bold",
     },
     "usfm:ms2": {
+      fontSize: "x-large",
+      fontWeight: "bold",
+    },
+    "usfm:ms3": {
+      fontSize: "large",
+      fontWeight: "bold",
+    },
+    "usfm:ms4": {
+      fontSize: "medium",
+      fontStyle: "italic",
       fontWeight: "bold",
     },
     "usfm:mt": {
       fontWeight: "bold",
       fontStyle: "italic",
-      fontSize: "xx-large",
+      fontSize: "xxx-large",
+
       textAlign: "center",
     },
     "usfm:mt2": {
       fontWeight: "bold",
       fontStyle: "italic",
-      fontSize: "x-large",
+      fontSize: "xx-large",
       textAlign: "center",
     },
     "usfm:mt3": {
-      fontWeight: "bold",
+      fontStyle: "italic",
+      fontSize: "x-large",
+      textAlign: "center",
+    },
+    "usfm:mt4": {
       fontStyle: "italic",
       fontSize: "large",
       textAlign: "center",
     },
     "usfm:nb": {},
     "usfm:p": {
-      textIndent: "1.5em",
     },
     "usfm:pc": {
       textAlign: "center",
@@ -128,22 +149,22 @@ const renderStyles = {
       textIndent: "1.5em",
     },
     "usfm:q": {
-      paddingLeft: "1.5em",
+      paddingLeft: "1em",
       marginTop: "0.5ex",
       marginBottom: "0.5ex",
     },
     "usfm:q2": {
-      paddingLeft: "3em",
+      paddingLeft: "1.5em",
       marginTop: "0.5ex",
       marginBottom: "0.5ex",
     },
     "usfm:q3": {
-      paddingLeft: "4.5em",
+      paddingLeft: "2em",
       marginTop: "0.5ex",
       marginBottom: "0.5ex",
     },
     "usfm:q4": {
-      paddingLeft: "6em",
+      paddingLeft: "2.5em",
       marginTop: "0.5ex",
       marginBottom: "0.5ex",
     },
@@ -158,18 +179,16 @@ const renderStyles = {
       fontWeight: "bold",
     },
     "usfm:s": {
-      fontStyle: "italic",
-      fontSize: "xx-large",
+      fontSize: "x-large",
     },
     "usfm:s2": {
       fontStyle: "italic",
-      fontSize: "x-large",
-    },
-    "usfm:s3": {
-      fontStyle: "italic",
       fontSize: "large",
     },
-    "usfm:s4": {},
+    "usfm:s3": {
+      fontSize: "medium",
+    },
+    "usfm:s4": { fontSize: "medium", fontStyle: "italic" },
     "usfm:s5": {},
     "usfm:sr": {
       fontSize: "large",
@@ -192,8 +211,12 @@ const renderStyles = {
       marginRight: "0.5em",
     },
   },
+
   wrappers: {
     default: {},
+    "usfm:pn": {
+      fontSize: "xx-large",
+    },
     "usfm:add": {
       fontStyle: "italic",
     },
@@ -228,7 +251,7 @@ const renderStyles = {
     },
     "usfm:nd": {
       fontWeight: "bold",
-      fontSize: "smaller",
+      fontSize: "small",
       textTransform: "uppercase",
     },
     "usfm:qs": {
@@ -236,7 +259,7 @@ const renderStyles = {
       fontStyle: "italic",
     },
     "usfm:sc": {
-      fontSize: "smaller",
+      fontSize: "small",
       textTransform: "uppercase",
     },
     "usfm:tl": {
@@ -259,12 +282,12 @@ export { renderStyles, ConvertCssToReactNativeStyleOnFloor };
 function ConvertCssToReactNativeStyleOnFloor(
   styleSheet,
   index,
-  fontFamily = null
+  fontFamil = null
 ) {
   const multiTab = [0.75, 0.88, 1, 1.15, 1.25];
-  const fontSpace = [0.1, 0.25, 0.5, 0.14, 0, 0, 0];
-  const fontSizeTab = [14, 14, 16, 16, 22, 24, 36];
-  const lineHeightTab = [20, 20, 24, 24, 28, 32, 44];
+  const fontSpace = [0.5, 0.15, 0, 0, 0];
+  const fontSizeTab = [16, 16, 22, 24, 28];
+  const lineHeightTab = [32, 24, 28, 32, 36];
 
   //  note that this function is not exaustive and need futher adding. Unfortunatly not all css
   //is compatible with react native so be sure to check the documentation when adding css
@@ -272,20 +295,27 @@ function ConvertCssToReactNativeStyleOnFloor(
 
   const thirdLayerKeysArray = Object.keys(copyStyleSheet);
 
-  let font = `${fontFamily}`;
+  let fontFamily = `${fontFamil}`;
   let values = Object.values(copyStyleSheet);
-  if (values.includes("bold") && values.includes("italic")) {
-    // font = font + "-BoldItalic";
-    // copyStyleSheet["fontFamily"] = font;
-    delete copyStyleSheet["fontWeight"];
-    delete copyStyleSheet["fontStyle"];
-  } else if (values.includes("bold")) {
-    // font = font + "-Bold";
-    // copyStyleSheet["fontFamily"] = font;
+  let keys = Object.keys(copyStyleSheet)
+  if(keys.includes('fontStyle') || keys.includes('fontWeight')){
+    if(!keys.includes('fontSize')){
+      copyStyleSheet['fontSize'] = 'medium'
+    }
+  }
+  // if (values.includes("bold") && values.includes("italic")) {
+  //   fontFamily = font + "-BoldItalic";
+  //   copyStyleSheet["fontFamily"] = fontFamily;
+  //   delete copyStyleSheet["fontWeight"];
+  //   delete copyStyleSheet["fontStyle"];
+  // }
+  if (values.includes("bold")) {
+    // fontFamily = fontFamily + "-Bold";
+    // copyStyleSheet["fontFamily"] = fontFamily;
     delete copyStyleSheet["fontWeight"];
   } else if (values.includes("italic")) {
-    // font = font + "-Bold";
-    // copyStyleSheet["fontFamily"] = font;
+    fontFamily = fontFamily + "Italic";
+    copyStyleSheet["fontFamily"] = fontFamily;
     delete copyStyleSheet["fontStyle"];
   }
 
@@ -316,56 +346,67 @@ function ConvertCssToReactNativeStyleOnFloor(
       copyStyleSheet[thirdLayerKey] = fontSizeTab[0] * multiTab[index]
       copyStyleSheet["lineHeight"] = lineHeightTab[0]  * multiTab[index]
       copyStyleSheet["letterSpacing"] = fontSpace[0];
-      if (fontFamily) {
-        copyStyleSheet["fontFamily"] = `${fontFamily}-Medium`;
+      if (fontFamil) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}Medium`;
       }
     }
     if (copyStyleSheet[thirdLayerKey] === "x-small") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[1]  * multiTab[index]
-      copyStyleSheet["lineHeight"] = lineHeightTab[1]  * multiTab[index]
-      copyStyleSheet["letterSpacing"] = fontSpace[1];
-      if (fontFamily) {
-        copyStyleSheet["fontFamily"] = `${fontFamily}-Regular`;
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[0]  * multiTab[index]
+      copyStyleSheet["lineHeight"] = lineHeightTab[0]  * multiTab[index]
+      copyStyleSheet["letterSpacing"] = fontSpace[0];
+      if (fontFamil) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}Regular`;
       }
     }
     if (copyStyleSheet[thirdLayerKey] === "small") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[2]  * multiTab[index]
-      copyStyleSheet["lineHeight"] = lineHeightTab[2]  * multiTab[index]
-      copyStyleSheet["letterSpacing"] = fontSpace[2];
-      if (fontFamily) {
-        copyStyleSheet["fontFamily"] = `${fontFamily}-Regular`;
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[0] * multiTab[index];
+      copyStyleSheet["lineHeight"] = lineHeightTab[0] * multiTab[index];
+      copyStyleSheet["letterSpacing"] = fontSpace[0];
+      if (fontFamil) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}Regular`;
       }
     }
     if (copyStyleSheet[thirdLayerKey] === "medium") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[3]  * multiTab[index]
-      copyStyleSheet["lineHeight"] = lineHeightTab[3]  * multiTab[index]
-      copyStyleSheet["letterSpacing"] = fontSpace[3];
-      if (fontFamily) {
-        copyStyleSheet["fontFamily"] = `${fontFamily}-Medium`;
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[0] * multiTab[index];
+      copyStyleSheet["lineHeight"] = lineHeightTab[0] * multiTab[index];
+      copyStyleSheet["letterSpacing"] = fontSpace[0];
+      if (fontFamil) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}Regular`;
       }
     }
     if (copyStyleSheet[thirdLayerKey] === "large") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[4]  * multiTab[index]
-      copyStyleSheet["lineHeight"] = lineHeightTab[4]  * multiTab[index]
-      copyStyleSheet["letterSpacing"] = fontSpace[4];
-      if (fontFamily) {
-        copyStyleSheet["fontFamily"] = `${fontFamily}-Regular`;
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[1] * multiTab[index];
+      copyStyleSheet["lineHeight"] = lineHeightTab[1] * multiTab[index];
+      copyStyleSheet["letterSpacing"] = fontSpace[1];
+      if (fontFamil) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}Medium`;
       }
     }
     if (copyStyleSheet[thirdLayerKey] === "x-large") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[5]  * multiTab[index]
-      copyStyleSheet["lineHeight"] = lineHeightTab[5]  * multiTab[index]
-      copyStyleSheet["letterSpacing"] = fontSpace[5];
-      if (fontFamily) {
-        copyStyleSheet["fontFamily"] = `${fontFamily}-Regular`;
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[2] * multiTab[index];
+      copyStyleSheet["lineHeight"] = lineHeightTab[2] * multiTab[index];
+      copyStyleSheet["letterSpacing"] = fontSpace[2];
+
+      if (fontFamil) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}Regular`;
       }
     }
     if (copyStyleSheet[thirdLayerKey] === "xx-large") {
-      copyStyleSheet[thirdLayerKey] = fontSizeTab[6]  * multiTab[index]
-      copyStyleSheet["lineHeight"] = lineHeightTab[6]  * multiTab[index]
-      copyStyleSheet["letterSpacing"] = fontSpace[6];
-      if (fontFamily) {
-        copyStyleSheet["fontFamily"] = `${fontFamily}-Regular`;
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[3] * multiTab[index];
+      copyStyleSheet["lineHeight"] = lineHeightTab[3] * multiTab[index];
+      copyStyleSheet["letterSpacing"] = fontSpace[3];
+
+      if (fontFamil) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}Regular`;
+      }
+    }
+    if (copyStyleSheet[thirdLayerKey] === "xxx-large") {
+      copyStyleSheet[thirdLayerKey] = fontSizeTab[4] * multiTab[index];
+      copyStyleSheet["lineHeight"] = lineHeightTab[4] * multiTab[index];
+      copyStyleSheet["letterSpacing"] = fontSpace[4];
+
+      if (fontFamil) {
+        copyStyleSheet["fontFamily"] = `${fontFamily}Regular`;
       }
     }
     if (typeof copyStyleSheet[thirdLayerKey] === typeof "string") {
@@ -379,6 +420,12 @@ function ConvertCssToReactNativeStyleOnFloor(
       if (copyStyleSheet[thirdLayerKey].includes("ex")) {
         let stringToChange = copyStyleSheet[thirdLayerKey];
         stringToChange.replace("ex", "");
+        copyStyleSheet[thirdLayerKey] = parseFloat(stringToChange);
+        return;
+      }
+      if (copyStyleSheet[thirdLayerKey].includes("px")) {
+        let stringToChange = copyStyleSheet[thirdLayerKey];
+        stringToChange.replace("px", "");
         copyStyleSheet[thirdLayerKey] = parseFloat(stringToChange);
         return;
       }

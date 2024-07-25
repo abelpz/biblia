@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   dropdown: {
     height: 32,
 
-    width: Dimensions.get("window").width - 4 * 48 - 16, //-16 for 4*2 padding and 4*2 for 4 gap
+    width: Dimensions.get("window").width - 3 * 48 - 16, //-16 for 4*2 padding and 4*2 for 4 gap
     borderWidth: 1,
     borderRadius: 9,
     borderColor: "#777680",
@@ -145,9 +145,9 @@ const styles = StyleSheet.create({
   containerStyle: {
     maxHeight: 600,
     minHeight: 300,
-    borderBottomLeftRadius: 4,
-    borderBottomRightRadius: 4,
+    borderRadius: 4,
     paddingBottom: 12,
+    marginTop: 16,
   },
   itemContainerStyle: {
     paddingLeft: 8,

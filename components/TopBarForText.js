@@ -26,7 +26,8 @@ export default function TopBarForText({
   functionAddResources,
   functionInfo,
   setIsOnTop,
-  children
+  children,
+
 }) {
   const { colors, theme } = useContext(ColorThemeContext);
   const progress = useDerivedValue(() => {
@@ -37,8 +38,8 @@ export default function TopBarForText({
     titleContainer: {
       paddingLeft: 8,
       paddingRight: 8,
-      textAlign: "center",
-    },
+      justifyContent: "center",
+      alignItems: "center",    },
 
     customButton: {
       width: "50%",
@@ -72,28 +73,62 @@ export default function TopBarForText({
 
   return (
     <>
-    <Animated.View style={[HeaderStyle, { width: "100%" }]}>
-      <TopBarContainer>
+    <Animated.View style={[HeaderStyle,  styles.titleContainer ]}>
         <View
           style={{
             flexDirection: "row",
             gap: 4,
-            height: 48,
+            height: 64,
             paddingHorizontal: 4,
             paddingVertical: 8,
             alignItems: "center",
           }}
         >
-          <View style={{ height: 48, width: 48}}></View>
+          <View  style={{
+                justifyContent: "center",
+                alignSelf: "center",
+                height: 48,
+                width: 48,
+                margin: 0,
+                padding: 0,
+              }}
+          >
+        
+                
+          </View>
           <DropDownSelectRessources setDocSetId={functionTitle} />
           <View
             style={{
               height: 48,
-              width: 48*3,
+              width: 48*2,
               flexDirection: "row",
               margin: 0,
             }}
           >
+             <View
+              style={{
+                justifyContent: "center",
+                alignSelf: "center",
+                height: 48,
+                width: 48,
+                margin: 0,
+                padding: 0,
+              }}
+            >
+              <IconButton
+                style={{
+                  margin: 0,
+                  alignSelf: "center",
+                  width: 48,
+                  height: 48,
+                }}
+                onPress={() => functionInfo()}
+                icon={() => <InfoIcon 
+                  color={colors.schemes[theme].onSurfaceVariant} 
+
+                />}
+              />
+            </View>
             <View
               style={{
                 justifyContent: "center",
@@ -112,31 +147,13 @@ export default function TopBarForText({
                   height: 48,
                 }}
                 onPress={() => functionParamText()}
-                icon={() => <ParamTextIcon />}
+                icon={() => <ParamTextIcon
+                  color={colors.schemes[theme].onSurfaceVariant} 
+                  />}
               />
             </View>
-            <View
-              style={{
-                justifyContent: "center",
-                alignSelf: "center",
-                height: 48,
-                width: 48,
-                margin: 0,
-                padding: 0,
-              }}
-            >
-              <IconButton
-                style={{
-                  margin: 0,
-                  alignSelf: "center",
-                  width: 48,
-                  height: 48,
-                }}
-                onPress={() => functionInfo()}
-                icon={() => <InfoIcon />}
-              />
-            </View>
-            <View
+           
+            {/* <View
               style={{
                 height: 48,
                 width: 48,
@@ -153,12 +170,14 @@ export default function TopBarForText({
                   margin: 0,
                 }}
                 onPress={functionParamText}
-                icon={() => <AddResourcesIcon />}
+                icon={() => <AddResourcesIcon
+                  color={colors.schemes[theme].onSurfaceVariant} 
+
+                   />}
               />
-            </View>
+            </View> */}
           </View>
         </View>
-      </TopBarContainer>
     </Animated.View>
     <View style={{flex:1}}>{children}</View>
     </>

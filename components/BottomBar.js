@@ -35,6 +35,7 @@ export default function BottomBar({
       borderRadius: 9,
       margin: 0,
       padding: 0,
+      width:110,
       borderColor: colors.schemes[theme].outline,
       borderStyle: "solid",
       alignItems: "center",
@@ -44,6 +45,7 @@ export default function BottomBar({
       paddingRight: 8,
       paddingLeft: 16,
       alignSelf: "center",
+      justifyContent:'center',
       overflow: "hidden",
     },
     buttonInnerContent: {
@@ -82,7 +84,11 @@ export default function BottomBar({
                 }}
                 icon={() => (
                   <ArrowLeftGreyIcon
-                    color={isFirstOfFirstBook ? "grey" : "black"}
+                    color={
+                      isFirstOfFirstBook
+                        ? colors.stateLayers[theme].onSurface.opacity016
+                        : colors.schemes[theme].onSurface
+                    }
                     width={18}
                     height={18}
                   />
@@ -103,13 +109,24 @@ export default function BottomBar({
             >
               <View style={styles.customButton}>
                 <View style={styles.buttonInnerContent}>
-                  <Text variant="labelLarge">
+                  <Text
+                    style={{color: colors.schemes[theme].onSurfaceVariant}}
+                    variant="labelLarge"
+                  >
                     {currentBook} {currentChap}
                   </Text>
                   {isModalVisible ? (
-                    <ArrowUpIcon width={18} height={18} />
+                    <ArrowUpIcon
+                      color={colors.schemes[theme].onSurface}
+                      width={18}
+                      height={18}
+                    />
                   ) : (
-                    <ArrowDownIcon width={18} height={18} />
+                    <ArrowDownIcon
+                      color={colors.schemes[theme].onSurface}
+                      width={18}
+                      height={18}
+                    />
                   )}
                 </View>
               </View>
@@ -132,7 +149,11 @@ export default function BottomBar({
                 }}
                 icon={() => (
                   <ArrowRightGreyIcon
-                    color={isLastOfLastBook ? "grey" : "black"}
+                    color={
+                      isLastOfLastBook
+                        ? colors.stateLayers[theme].onSurface.opacity016
+                        : colors.schemes[theme].onSurface
+                    }
                     style={{ margin: 8 }}
                     width={24}
                     height={24}
@@ -151,4 +172,3 @@ export default function BottomBar({
     </View>
   );
 }
-

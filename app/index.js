@@ -27,8 +27,10 @@ export default function IndexScreen() {
     // 'Andika-BoldItalic': require('../assets/fonts/Andika/Andika-BoldItalic.ttf'),
     // 'Andika-BoldItalic': require('../assets/fonts/Andika/Andika-Regular.ttf'),
     'NotoSans':require('../assets/fonts/Noto/NotoSans-Regular.ttf'),
-    'NotoSans-Regular':require('../assets/fonts/Noto/NotoSans-Regular.ttf'),
-    'NotoSans-Medium':require('../assets/fonts/Noto/NotoSans-Medium.ttf'),
+    'NotoSansItalicRegular':require('../assets/fonts/Noto/NotoSans-Italic.ttf'),
+    'NotoSansItalicMedium':require('../assets/fonts/Noto/NotoSans-MediumItalic.ttf'),
+    'NotoSansRegular':require('../assets/fonts/Noto/NotoSans-Regular.ttf'),
+    'NotoSansMedium':require('../assets/fonts/Noto/NotoSans-Medium.ttf'),
 
   });
 

@@ -15,7 +15,6 @@ export function ReadingScreenAllBook({
   documentResult,
   bibleFormat,
 }) {
-  console.log(fontSize)
   const [chapterBuffer, setChapterBuffer] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { colors, theme } = useContext(ColorThemeContext);
@@ -24,7 +23,7 @@ export function ReadingScreenAllBook({
     showTitles: true,
     showHeadings: true,
     showIntroductions: true,
-    showFootnotes: true,
+    showFootnotes: false,
     showXrefs: false,
     showParaStyles: true, 
     showCharacterMarkup: false,
@@ -38,14 +37,22 @@ export function ReadingScreenAllBook({
     fontConfig: {
       fontFamily: fontFamily,
       fontSize: fontSize,
+      fontColor: {
+        fontText: colors.schemes[theme].onSurface,
+        fontChap: colors.schemes[theme].onSurface,
+        fontVerse: colors.schemes[theme].onSurface,
+        surface: colors.schemes[theme].surface ,
+        surfaceVariant: colors.schemes[theme].surfaceVariant,
+      },
     },
+    
     renderers,
   });
   const styles = StyleSheet.create({
     scrollContainer: {
       backgroundColor: colors.schemes[theme].surface,
-      paddingHorizontal: 10,
-      height: "80%",
+      paddingHorizontal: 24,
+
     },
     activityContainer: {
       width: "100%",
@@ -65,6 +72,13 @@ export function ReadingScreenAllBook({
       fontConfig: {
         fontFamily: fontFamily,
         fontSize: fontSize,
+        fontColor: {
+          fontText: colors.schemes[theme].onSurface,
+          fontChap: colors.schemes[theme].onSurface,
+          fontVerse: colors.schemes[theme].onSurface,
+          surface: colors.schemes[theme].surface ,
+          surfaceVariant: colors.schemes[theme].surfaceVariant,
+        },
       },
     }));
   }, [currentChap, fontSize, fontFamily, bibleFormat]);

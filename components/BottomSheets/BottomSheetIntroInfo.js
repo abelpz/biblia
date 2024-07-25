@@ -4,7 +4,7 @@ import { ProskommaContext } from "../../context/proskommaContext";
 import { I18nContext } from "../../context/i18nContext";
 import { ScrollView, View } from "react-native";
 import { ColorThemeContext } from "../../context/colorThemeContext";
-import { BottomSheetView } from "@gorhom/bottom-sheet";
+import { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
 import { useDocumentQuery } from "../renderer/textComponentRender/RenderText";
 import { renderDoc } from "../renderer/textComponentRender/RenderText";
 import { renderers } from "../renderer/utils/renderReactNative";
@@ -24,16 +24,23 @@ export default function BottomSheetIntroInfo({ docSetId, shown }) {
     showTitles: true,
     showHeadings: true,
     showIntroductions: true,
-    showFootnotes: true,
+    showFootnotes: false,
     showXrefs: false,
     showParaStyles: true,
     showCharacterMarkup: false,
     showVersesLabels: true,
     showChapterLabels: true,
     fontConfig: {
-        fontFamily: 'NotoSans',
-        fontSize: 4,
+      fontColor: {
+        fontText: colors.schemes[theme].onSurface,
+        fontChap: colors.schemes[theme].onSurface,
+        fontVerse: colors.schemes[theme].onSurface,
+        surface: colors.schemes[theme].surface ,
+        surfaceVariant: colors.schemes[theme].surfaceVariant,
       },
+      fontFamily: "NotoSans",
+      fontSize: 2,
+    },
     excludeScopeTypes: ["milestone", "attribute", "spanWithAtts"],
     bcvNotesCallback: (bcv) => {},
     renderers,
@@ -46,7 +53,10 @@ export default function BottomSheetIntroInfo({ docSetId, shown }) {
       setLoading(false);
     } else {
       setIntroComponent(
-        <Text style={{ padding: 16 }} variant="bodyLarge">
+        <Text
+          style={{ padding: 16, color: colors.schemes[theme].onSurface }}
+          variant="bodyLarge"
+        >
           {i18n.t("noIntro")}
         </Text>
       );
@@ -74,8 +84,14 @@ export default function BottomSheetIntroInfo({ docSetId, shown }) {
   }, [docSetId]);
 
   return (
-    <BottomSheetView style={{ paddingHorizontal: 16, gap: 12 }}>
-      <Text variant="titleMedium">{i18n.t("about")}</Text>
+    <BottomSheetScrollView >
+        <View style={{ paddingHorizontal: 16, gap: 12,marginBottom:16 }}>
+      <Text
+        style={{ color: colors.schemes[theme].onSurface }}
+        variant="titleMedium"
+      >
+        {i18n.t("about")}
+      </Text>
       <View
         style={{
           gap: 10,
@@ -89,28 +105,84 @@ export default function BottomSheetIntroInfo({ docSetId, shown }) {
         ) : (
           info && (
             <>
-              <Text variant="headlineSmall">{info[0].split(":")[1]}</Text>
-              <View style={{ gap: 24, paddingLeft: 24, flexDirection: "row" }}>
-                <View>
-                  <Text variant="labelLarge">{i18n.t("language")}</Text>
-                  <Text variant="labelLarge">{i18n.t("edition")}</Text>
-                  <Text variant="labelLarge">{i18n.t("copyright")}</Text>
+              <Text
+                style={{ color: colors.schemes[theme].onSecondaryContainer }}
+                variant="headlineSmall"
+              >
+                {info[0].split(":")[1]}
+              </Text>
+              <View
+              >
+                <View style={{flexDirection:'row',alignItems:'center',gap:24,paddingLeft:24}}>
+                  <Text
+                    style={{
+                      color: colors.schemes[theme].onSecondaryContainer,
+                    }}
+                    variant="labelLarge"
+                  >
+                    {i18n.t("language")}
+                  </Text>
+                  <Text
+                    style={{
+                      color: colors.schemes[theme].onSecondaryContainer,
+                    }}
+                    variant="bodyLarge"
+                  >
+                    {info[2].split(":")[1]}
+                  </Text>
                 </View>
-                <View>
-                  <Text variant="labelLarge">{info[2].split(":")[1]}</Text>
-                  <Text variant="labelLarge">{info[3].split(":")[1]}</Text>
-                  <Text variant="labelLarge">{info[1].split(":")[1]}</Text>
+                <View style={{flexDirection:'row',alignItems:'center',gap:24,paddingLeft:24}}>
+                    <Text
+                      style={{
+                        color: colors.schemes[theme].onSecondaryContainer,
+                      }}
+                      variant="labelLarge"
+                    >
+                      {i18n.t("edition")}
+                    </Text>
+                    <Text
+                      style={{
+                        color: colors.schemes[theme].onSecondaryContainer,
+                      }}
+                      variant="bodyLarge"
+                    >
+                      {info[3].split(":")[1]}
+                    </Text>
+                </View>
+                <View style={{flexDirection:'row',alignItems:'center',gap:24,paddingLeft:24}}>
+                  <Text
+                    style={{
+                      color: colors.schemes[theme].onSecondaryContainer,
+                    }}
+                    variant="labelLarge"
+                  >
+                    {i18n.t("copyright")}
+                  </Text>
+
+                  <Text
+                    style={{
+                      color: colors.schemes[theme].onSecondaryContainer,
+                    }}
+                    variant="bodyLarge"
+                  >
+                    {info[1].split(":")[1]}
+                  </Text>
                 </View>
               </View>
             </>
           )
         )}
       </View>
-      <Text variant="titleMedium">{i18n.t("introductionBook")}</Text>
+      <Text
+        style={{ color: colors.schemes[theme].onSurface }}
+        variant="titleMedium"
+      >
+        {i18n.t("introductionBook")}
+      </Text>
       {loading ? (
         <ActivityIndicator />
       ) : (
-        <ScrollView
+        <View
           style={{
             backgroundColor: colors.schemes[theme].surfaceContainerHighest,
             padding: 16,
@@ -118,9 +190,10 @@ export default function BottomSheetIntroInfo({ docSetId, shown }) {
           }}
         >
           {introComponent}
-        </ScrollView>
+        </View>
       )}
-    </BottomSheetView>
+      </View>
+    </BottomSheetScrollView>
   );
 }
 
