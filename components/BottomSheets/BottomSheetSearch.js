@@ -1,7 +1,7 @@
 import { TextInput } from "react-native-paper";
 import { View, StyleSheet } from "react-native";
 import { useState } from "react";
-import { LoopIcon } from "../../assets/icons/flavorIcons/icons";
+import LoopIcon from "../../assets/icons/flavorIcons/loop";
 export default function BottomSheetSearch() {
   const [text, setText] = useState("");
 

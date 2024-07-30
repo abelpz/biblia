@@ -1,60 +1,69 @@
-import React, { useContext, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View } from "react-native";
+import { useRouter } from "expo-router";
 import { useFonts } from 'expo-font';
-import ButtonNavigationForFirstTab from "../components/ButtonNavigationForFirstTab";
+import * as SplashScreen from 'expo-splash-screen';
 import { ProskommaContext } from "../context/proskommaContext";
 import { I18nContext } from "../context/i18nContext";
-import { Button } from "react-native-paper";
+import SplashScreenXenizo from "../components/SplashScreen";
 
-export default function App() {
+SplashScreen.preventAutoHideAsync();
+
+export default function IndexScreen() {
+  const router = useRouter();
   const { pk } = useContext(ProskommaContext);
-  const { i18n,setLanguage} = useContext(I18nContext);
-  setLanguage('fr')
-  // Load all font styles with mapping
+  const { setLanguage } = useContext(I18nContext);
+  const [isReady, setIsReady] = useState(false);
+
   let [fontsLoaded] = useFonts({
-    'Gentium': require('../assets/fonts/Gentium/GentiumPlus-Regular.ttf'),
-    'Gentium-Bold': require('../assets/fonts/Gentium/GentiumPlus-Bold.ttf'),
-    'Gentium-Italic': require('../assets/fonts/Gentium/GentiumPlus-Italic.ttf'),
-    'Gentium-BoldItalic': require('../assets/fonts/Gentium/GentiumPlus-BoldItalic.ttf'),
+    'NotoSans': require('../assets/fonts/Noto/NotoSans-Regular.ttf'),
+    'NotoSansItalic': require('../assets/fonts/Noto/NotoSans-Italic.ttf'),
+    'NotoSansItalicRegular': require('../assets/fonts/Noto/NotoSans-Italic.ttf'),
+    'NotoSansItalicMedium': require('../assets/fonts/Noto/NotoSans-MediumItalic.ttf'),
+    'NotoSansRegular': require('../assets/fonts/Noto/NotoSans-Regular.ttf'),
+    'NotoSansMedium': require('../assets/fonts/Noto/NotoSans-Medium.ttf'),
+    'NotoSansBold':require('../assets/fonts/Noto/NotoSans-Bold.ttf'),
   });
   useEffect(() => {
-    const psle = require('../assets/Succinct/psle_succinct.json');
-    pk.loadSuccinctDocSet(psle);
+    async function prepare(){
+      SplashScreen.preventAutoHideAsync();
+    }
+    prepare()
   }, []);
 
-  if (!fontsLoaded) {
-    return <View></View>;
+  useEffect(() => {
+    async function loadResources() {
+      if (!isReady) {
+        const psle = require("../assets/Succinct/psle_succinct.json");
+        Object.keys(psle).map(k => pk.loadSuccinctDocSet(psle[k].content));
+        
+        setLanguage("fr"); // Set the language
+
+        setIsReady(true); // Mark as ready
+      }
+    }
+
+    loadResources();
+  }, []);
+
+  useEffect(() => {
+    async function hideSplashScreen() {
+      if (fontsLoaded && isReady) {
+        await SplashScreen.hideAsync();
+        router.push("/test");
+      }
+    }
+
+    hideSplashScreen();
+  }, [isReady, fontsLoaded]);
+
+  if (!fontsLoaded || !isReady) {
+    return null; // Return null while waiting for resources to load
   }
 
-
-
   return (
-    <View style={styles.container}>
-      <ButtonNavigationForFirstTab />
-      <Button onPress={()=> {
-        styles.text.fontSize = 40
-        }}>Plus 2</Button>
-      <Text style={[styles.text, { fontWeight: 'normal' }]}>This is regular text</Text>
-      <Text style={[styles.text, { fontWeight: 'bold' }]}>This is bold text</Text>
-      <Text style={[styles.text, { fontStyle: 'italic' }]}>This is italic text</Text>
-      <Text style={[styles.text, { fontWeight: 'bold', fontStyle: 'italic' }]}>This is bold italic text</Text>
-      <Text>{i18n.t('greeting')}</Text>
-
-      <StatusBar style="auto" />
+    <View>
+      <SplashScreenXenizo />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  text: {
-    fontFamily: 'Gentium',
-    fontSize: 18,
-  },
-});

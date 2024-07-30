@@ -1,32 +1,61 @@
 {
   "expo": {
-    "name": "Sunalizo",
-    "slug": "Sunalizo",
-    "scheme": "Sunalizo",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icons/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
+    "name": "Sunteleo",
+    "slug": "k2",
+    "owner": "xenizo",
+    "version": "0.1.0",
+    "scheme": "Sunteleo",
+    "platforms": ["ios", "android"],
+    "icon": "./assets/icons/adaptive-icon.png",
     "splash": {
-      "image": "./assets/icons/splash.png",
+      "image": "./assets/icons/SplashScreen/IconSplasDark.png",
       "resizeMode": "contain",
-      "backgroundColor": "rgba(84, 90, 146, 1)"
-    },
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icons/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+      "backgroundColor": "#232B65",
+      "dark": {
+        "image": "./assets/icons/SplashScreen/IconSplasDark.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#232B65"
       }
     },
-    "web": {
-      "favicon": "./assets/icons/favicon.png"
+    "android": {
+      "blockedPermissions": ["android.permission.READ_EXTERNAL_STORAGE","android.permission.WRITE_EXTERNAL_STORAGE"],
+
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "backgrondImage": "./assets/icons/IconBackground.png"
+      },
+      "package": "com.xenizo.sunteleo",
+      "splash": {
+        "image": "./assets/icons/SplashScreen/IconSplasDark.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#232B65",
+        "dark": {
+          "image": "./assets/icons/SplashScreen/IconSplasDark.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#232B65"
+        }
+      }
     },
-    "plugins": [
-      "expo-router",
-      "expo-font"
-    ]
+
+    "ios": {
+      "splash": {
+        "image": "./assets/icons/SplashScreen/IconSplash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#DFE0FF",
+        "dark": {
+          "image": "./assets/icons/SplashScreen/IconSplasDark.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#232B65"
+        }
+      }
+    },
+
+    "extra": {
+      "eas": {
+        "projectId": "3fdc3cf5-eacb-4cfb-8c75-364205249ba2"
+      }
+    },
+    "runtimeVersion": "0.1.0"
   }
 }
