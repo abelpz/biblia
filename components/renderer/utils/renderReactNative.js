@@ -12,18 +12,24 @@ function getStyles(type, subType, indexForStyle, fontFamily = null) {
   if (!rs[type]) {
     throw new Error(`Unknown style type '${type}'`);
   }
-  
+  if (!rs[type][subType]) {
+    console.log(`Unknown style '${type}' '${subType}'`);
+    if (indexForStyle && fontFamily) {
+      return ConvertCssToReactNativeStyleOnFloor(
+        rs[type]["default"],
+        indexForStyle,
+        fontFamily
+      );
+    } else {
+      return ConvertCssToReactNativeStyleOnFloor(rs[type]["default"]);
+    }
+  }
   if (indexForStyle && fontFamily) {
     return ConvertCssToReactNativeStyleOnFloor(
       rs[type][subType],
       indexForStyle,
       fontFamily
     );
-  }
-  if(!rs[type][subType]){
-    console.log(`Unknown style type '${subType}'`);
-    return ConvertCssToReactNativeStyleOnFloor(rs[type]['usfm:p']);
-
   }
   return ConvertCssToReactNativeStyleOnFloor(rs[type][subType]);
 }
@@ -100,10 +106,9 @@ const renderers = {
               ...ConvertCssToReactNativeStyleOnFloor(
                 { fontSize: "medium" },
                 parseInt(fontConfig.fontSize),
-                fontConfig.fontFamily,
+                fontConfig.fontFamily
               ),
-              color:color,
-
+              color: color,
             }}
           >
             {word}
@@ -152,7 +157,7 @@ const renderers = {
       return (
         <TouchableOpacity
           key={id}
-          style={{ paddingHorizontal: 5 }}
+          style={{}}
           onPress={() => {
             bcvCallback(bcv);
           }}
@@ -167,6 +172,7 @@ const renderers = {
                 fontConfig.fontSize,
                 fontConfig.fontFamily
               ),
+              fontFamily: fontConfig.fontFamily + "Bold",
               //   color: "#00D",
               //   textDecorationLine: "underline",
             }}
@@ -186,8 +192,12 @@ const renderers = {
       >
         <Text
           style={{
-            ...getStyles("marks", "verses_label"),
-            marginRight: 10,
+            ...getStyles(
+              "marks",
+              "verses_label",
+              fontConfig.fontSize,
+              fontConfig.fontFamily
+            ),
           }}
         >
           {number}
@@ -220,7 +230,6 @@ const renderers = {
       "usfm:is4",
     ];
 
-
     if (tableIsViewText.includes(subType)) {
       const updatedContent = content.map((element, index) => {
         const updatedChildren = React.Children.map(
@@ -237,7 +246,6 @@ const renderers = {
                 display: "flex",
                 flexDirection: "row",
                 color: color,
-                marginVertical:8,
               },
               key: `title_subTitle_${index}_${childIndex}`,
             });
@@ -256,7 +264,14 @@ const renderers = {
       <InlineElement
         fontConfig={fontConfig}
         key={`paragraph_${id}`}
-        style={[getStyles("paras", subType, fontConfig.fontSize)]}
+        style={[
+          getStyles(
+            "paras",
+            subType,
+            fontConfig.fontSize,
+            fontConfig.fontFamily
+          ),
+        ]}
         linkText={subType === "usfm:f" ? `${footnoteNo}` : "*"}
       >
         {content}
@@ -268,7 +283,7 @@ const renderers = {
           flexWrap: "wrap",
           flexDirection: "row",
           alignItems: "flex-start",
-          paddingLeft: 18,
+          marginVertical: 8,
         }}
       >
         {TitleContent}
@@ -277,12 +292,21 @@ const renderers = {
       <View
         key={`parapgraphe_${id} `}
         style={{
-          ...getStyles("paras", subType),
-          alignItems: "flex-end",
+          ...getStyles(
+            "paras",
+            subType,
+            fontConfig.fontSize,
+            fontConfig.fontFamily
+          ),
           flexWrap: "wrap",
           flexDirection: "row",
-          marginBottom:['usfm:q','usfm:q2','usfm:q3'].includes(subType)?0:8,
+          alignItems: "flex-end",
 
+          marginBottom: ["usfm:q", "usfm:q2", "usfm:q3", "usfm:b"].includes(
+            subType
+          )
+            ? 0
+            : 8,
         }}
       >
         {content}
@@ -290,19 +314,34 @@ const renderers = {
     );
   },
 
-  wrapper: (atts, subType, content, id) => {
+  wrapper: (atts, subType, content, id, fontConfig) => {
+    const color = fontConfig?.fontColor
+      ? fontConfig.fontColor.fontText
+      : "black";
+
     if (subType.includes("usfm:it")) {
       return (
         <View
           key={`wrapper_${id} `}
-          style={{ flexDirection: "row", flexWrap: "wrap" }}
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+          }}
         >
           {content.map((element, index) => {
             const updatedChildren = React.Children.map(
               element.props.children,
               (child, childIndex) => {
                 return React.cloneElement(child, {
-                  style: { ...getStyles("wrappers", subType) },
+                  style: {
+                    ...getStyles(
+                      "wrappers",
+                      subType,
+                      fontConfig.fontSize,
+                      fontConfig.fontFamily
+                    ),
+                    color: color,
+                  },
                   key: `italic_text_intro${index}_${childIndex}`,
                 });
               }
@@ -317,16 +356,45 @@ const renderers = {
       );
     }
     const updatedContent = content.map((element, index) => {
-      return React.cloneElement(element, {
-        style: { paddingTop: 0 },
-        key: `wrapper_content_${index} `,
-      });
+      const updatedChildren = React.Children.map(
+        element.props.children,
+        (child, childIndex) => {
+          return React.cloneElement(child, {
+            style: {
+              ...getStyles(
+                "wrappers",
+                subType,
+                fontConfig.fontSize,
+                fontConfig.fontFamily
+              ),
+              color: color,
+              borderColor: color,
+            },
+            key: `wrapper${index}_${childIndex}`,
+          });
+        }
+      );
+      return React.cloneElement(
+        element,
+        { key: element.key || `parent_${index}` },
+        updatedChildren
+      );
     });
+
     if (["usfm:f", "usfm:ft", "usfm:fr"].includes(subType)) {
       return (
         <View
           key={`wrapper_${id}`}
-          style={{ ...getStyles("wrappers", subType), flexDirection: "row" }}
+          style={{
+            ...getStyles(
+              "wrappers",
+              subType,
+              fontConfig.fontSize,
+              fontConfig.fontFamily
+            ),
+            flexDirection: "row",
+            color: color,
+          }}
         >
           {updatedContent}
         </View>
@@ -347,9 +415,7 @@ const renderers = {
         />
       )
     ) : (
-      <View key={`wrapper_${id}`} style={getStyles("wrappers", subType)}>
-        {updatedContent}
-      </View>
+      <>{updatedContent}</>
     );
   },
   wWrapper: (atts, content, id) =>

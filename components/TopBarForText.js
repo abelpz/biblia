@@ -34,6 +34,7 @@ export default function TopBarForText({
     return isOnTop ? withTiming(1) : withTiming(0);
   }, [isOnTop]);
 
+
   const styles = StyleSheet.create({
     titleContainer: {
       paddingLeft: 8,
@@ -96,7 +97,7 @@ export default function TopBarForText({
         
                 
           </View>
-          <DropDownSelectRessources setDocSetId={functionTitle} />
+          <DropDownSelectRessources setIsOnTop ={setIsOnTop} setDocSetId={functionTitle} />
           <View
             style={{
               height: 48,

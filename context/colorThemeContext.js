@@ -7,11 +7,13 @@ const ColorThemeContext = createContext();
 const ColorThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(Appearance.getColorScheme());
   useEffect(() => {
-    const listener = (preferences) => {
-      setTheme(preferences.colorScheme);
+    const listener = ({ colorScheme }) => {
+      setTheme(colorScheme);
     };
-    Appearance.addChangeListener(listener);
-    return () => Appearance.removeChangeListener(listener);
+    
+    const subscription = Appearance.addChangeListener(listener);
+    
+    return () => subscription.remove();
   }, []);
 
   const colors = {

@@ -26,9 +26,10 @@ export function ReadingScreenAllBook({
     showFootnotes: false,
     showXrefs: false,
     showParaStyles: true, 
-    showCharacterMarkup: false,
+    showCharacterMarkup: true,
     showVersesLabels: true,
     showChapterLabels: true,
+    showFirstVerseLabel:false,
     selectedBcvNotes: [1],
     chapters: [`${currentChap}`],
     byVerse: bibleFormat === "byVerse",
@@ -81,7 +82,7 @@ export function ReadingScreenAllBook({
         },
       },
     }));
-  }, [currentChap, fontSize, fontFamily, bibleFormat]);
+  }, [currentChap, fontSize, fontFamily, bibleFormat,theme]);
 
   useEffect(() => {
     setIsLoading(true);

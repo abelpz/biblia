@@ -27,7 +27,7 @@ export default function BottomSheetIntroInfo({ docSetId, shown }) {
     showFootnotes: false,
     showXrefs: false,
     showParaStyles: true,
-    showCharacterMarkup: false,
+    showCharacterMarkup: true,
     showVersesLabels: true,
     showChapterLabels: true,
     fontConfig: {
@@ -73,7 +73,7 @@ export default function BottomSheetIntroInfo({ docSetId, shown }) {
       };
       fetchDocument();
     }
-  }, [docSetId]);
+  }, [docSetId,theme]);
 
   useEffect(() => {
     setLoading(true);
@@ -81,7 +81,7 @@ export default function BottomSheetIntroInfo({ docSetId, shown }) {
       setInfo(e);
       setLoading(false);
     });
-  }, [docSetId]);
+  }, [docSetId,theme]);
 
   return (
     <BottomSheetScrollView >

@@ -7,22 +7,29 @@
     "version": "0.1.0",
     "scheme": "Sunteleo",
     "platforms": ["ios", "android"],
+    "icon": "./assets/icons/adaptive-icon.png",
     "splash": {
-        "image": "./assets/icons/SplashScreen/IconSplash.png",
+      "image": "./assets/icons/SplashScreen/IconSplasDark.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#232B65",
+      "dark": {
+        "image": "./assets/icons/SplashScreen/IconSplasDark.png",
         "resizeMode": "contain",
-        "backgroundColor": "#DFE0FF",
-        "dark": {
-          "image": "./assets/icons/SplashScreen/IconSplasDark.png",
-          "resizeMode": "contain",
-          "backgroundColor": "#232B65"
-        }
-      },
+        "backgroundColor": "#232B65"
+      }
+    },
     "android": {
-      "package": "com.xenizo.sunalizo",
+      "blockedPermissions": ["android.permission.READ_EXTERNAL_STORAGE","android.permission.WRITE_EXTERNAL_STORAGE"],
+
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "backgrondImage": "./assets/icons/IconBackground.png"
+      },
+      "package": "com.xenizo.sunteleo",
       "splash": {
-        "image": "./assets/icons/SplashScreen/IconSplash.png",
-        "resizeMode": "contain" ,
-        "backgroundColor": "#DFE0FF",
+        "image": "./assets/icons/SplashScreen/IconSplasDark.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#232B65",
         "dark": {
           "image": "./assets/icons/SplashScreen/IconSplasDark.png",
           "resizeMode": "contain",
@@ -32,8 +39,6 @@
     },
 
     "ios": {
-      "bundleIdentifier": "com.xenizo.sunalizo",
-
       "splash": {
         "image": "./assets/icons/SplashScreen/IconSplash.png",
         "resizeMode": "contain",
@@ -51,8 +56,6 @@
         "projectId": "3fdc3cf5-eacb-4cfb-8c75-364205249ba2"
       }
     },
-    "runtimeVersion": "0.0.1"
-
+    "runtimeVersion": "0.1.0"
   }
-  
 }

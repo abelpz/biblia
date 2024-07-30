@@ -304,12 +304,16 @@ const sofria2WebActions = {
       test: ({ context }) => context.sequences[0].element.subType === "usfm:w",
       action: ({ config, workspace }) => {
         const popped = workspace.paraContentStack.shift();
+        let fontConfig = config.fontConfig
+          ? config.fontConfig
+          : { fontSize: 2, fontFamily: "default" };
 
         workspace.paraContentStack[0].content.push(
           config.renderers.wWrapper(
             workspace.settings.showWordAtts ? popped.atts : {},
             popped.content,
-            workspace.currentIndex
+            workspace.currentIndex,
+            fontConfig
           )
         );
         return false;
@@ -317,7 +321,7 @@ const sofria2WebActions = {
     },
     {
       description: "Collapse one level of paraContent Stack",
-      test: ({ context, workspace }) => {
+      test: ({ context, workspace, config }) => {
         return (
           !["chapter", "verses"].includes(
             context.sequences[0].element.subType
@@ -326,13 +330,17 @@ const sofria2WebActions = {
       },
       action: ({ config, workspace }) => {
         const popped = workspace.paraContentStack.shift();
+        let fontConfig = config.fontConfig
+          ? config.fontConfig
+          : { fontSize: 2, fontFamily: "default" };
 
         workspace.paraContentStack[0].content.push(
           config.renderers.wrapper(
             popped.subType === "cell" ? popped.atts : {},
             popped.subType,
             popped.content,
-            workspace.currentIndex
+            workspace.currentIndex,
+            config.fontConfig
           )
         );
       },
@@ -383,17 +391,19 @@ const sofria2WebActions = {
       description: "Push text to para",
       test: () => true,
       action: ({ config, context, workspace }) => {
+        let r = /\s*[\S\u00A0]+\s*/g;
         const element = context.sequences[0].element;
         //const renderedText = config.renderers.text(element.text);
         //workspace.paraContentStack[0].content.push(renderedText);
-        element.text.split(" ").map((w, id) => {
+        let fontConfig = config.fontConfig
+          ? config.fontConfig
+          : { fontSize: 2, fontFamily: "default" };
+        if(element.text === ' '){
           workspace.currentIndex += 1;
-          let word = id === element.text.split(" ") - 1 ? w : w + " ";
+          let word =  element.text;
           let idWord = workspace.currentIndex;
           let textRef = workspace.textRef;
-          let fontConfig = config.fontConfig
-            ? config.fontConfig
-            : { fontSize: 2, fontFamily: "default" };
+
           const renderedText = config.renderers.text({
             word,
             idWord,
@@ -401,7 +411,27 @@ const sofria2WebActions = {
             fontConfig,
           });
           workspace.paraContentStack[0].content.push(renderedText);
-        });
+        }
+        else{
+          let t = element.text.match(r);
+          if (t) {
+            t.map((w, id) => {
+              workspace.currentIndex += 1;
+              let word =  w;
+              let idWord = workspace.currentIndex;
+              let textRef = workspace.textRef;
+  
+              const renderedText = config.renderers.text({
+                word,
+                idWord,
+                workspace,
+                fontConfig,
+              });
+              workspace.paraContentStack[0].content.push(renderedText);
+            });
+          }
+        }
+       
       },
     },
   ],
@@ -431,6 +461,12 @@ const sofria2WebActions = {
           element.subType === "verses_label" &&
           workspace.settings.showVersesLabels
         ) {
+          if (
+            element.atts.number === "1" &&
+            !workspace.settings.showFirstVerseLabel
+          ) {
+            return false;
+          }
           let bcv = [];
           if (config.selectedBcvNotes.length > 0) {
             bcv = [workspace.bookCode, workspace.chapter, element.atts.number];

@@ -13,7 +13,7 @@ import { TouchableRipple } from "react-native-paper";
 import { ProskommaContext } from "../context/proskommaContext";
 import { ColorThemeContext } from "../context/colorThemeContext";
 
-export default function DropDownSelectRessources({ setDocSetId, docSetId }) {
+export default function DropDownSelectRessources({ setDocSetId, docSetId,setIsOnTop }) {
   const [inComponentValue, setInComponentValue] = useState(null);
   const { pk } = useContext(ProskommaContext);
   const { colors, theme } = useContext(ColorThemeContext);
@@ -31,6 +31,7 @@ export default function DropDownSelectRessources({ setDocSetId, docSetId }) {
   }, [inComponentValue]);
 
   const handleChange = (item) => {
+    setIsOnTop(false)
     setInComponentValue(item.value);
   };
 
@@ -105,7 +106,7 @@ export default function DropDownSelectRessources({ setDocSetId, docSetId }) {
         onPress={openDropdown}
         style={styles.touchableOverlay}
         borderless
-        rippleColor="rgba(0, 0, 0, .32)"
+        rippleColor = {colors.stateLayers[theme].onSurfaceVariant.opacity012}
       >
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <View style={{ flex: 1, height: "100%" }} />
@@ -121,7 +122,6 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     height: 32,
-
     width: Dimensions.get("window").width - 3 * 48 - 16, //-16 for 4*2 padding and 4*2 for 4 gap
     borderWidth: 1,
     borderRadius: 9,
@@ -147,7 +147,6 @@ const styles = StyleSheet.create({
     minHeight: 300,
     borderRadius: 4,
     paddingBottom: 12,
-    marginTop: 16,
   },
   itemContainerStyle: {
     paddingLeft: 8,

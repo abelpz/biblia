@@ -58,6 +58,7 @@ export default function BottomBar({
     InsideOfTheBottomBar: { gap: 8, flexDirection: "row" },
   });
 
+  
   return (
     <View style={styles.bottomContainer}>
       <View style={styles.InsideOfTheBottomBar}>
@@ -105,7 +106,7 @@ export default function BottomBar({
                 alignSelf: "center",
               }}
               borderless
-              rippleColor="rgba(0, 0, 0, .32)"
+              rippleColor={colors.stateLayers[theme].onSurfaceVariant.opacity012}
             >
               <View style={styles.customButton}>
                 <View style={styles.buttonInnerContent}>

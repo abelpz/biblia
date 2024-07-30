@@ -47,16 +47,18 @@ const Test = () => {
   const bottomSheetIntroInfoRef = useRef(null);
   const [isOnTop, setIsOnTop] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [isBottomSheetIntroInfoOpen, setIsBottomSheetOpenIntroInfoOpen] =useState(false)
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentChap, setCurrentChap] = useState(1);
   const [fontSize, setFontSize] = useState(2);
   const [documentResult, setDocResults] = useState(null);
-  const [currentBook, setCurrentBook] = useState("PHP");
+  const [currentBook, setCurrentBook] = useState("MRK");
   const [fontFamily, setFontFamily] = useState("NotoSans");
   const [bibleFormat, setBibleFormat] = useState("format");
   const [docSetId, setDocSetId] = useState("xenizo_psle_1");
   const [isFirstOfFirstBook, setIsFirstOfFirstBook] = useState(false);
   const [isLastOfLastBook, setIsLastOfLastBook] = useState(false);
+
 
   useEffect(() => {
     checkForLast(pk, currentBook, currentChap, docSetId).then((e) =>
@@ -67,6 +69,10 @@ const Test = () => {
       setIsFirstOfFirstBook(e)
     );
   }, [currentBook, currentChap, docSetId]);
+
+  useEffect(()=>{
+    setIsOnTop(false)
+  },[currentChap,currentBook])
 
   const handleNextChap = useCallback(async () => {
     const nexChap = await getNextChap(pk, currentChap, currentBook, docSetId);
@@ -138,18 +144,16 @@ const Test = () => {
     return () => backHandler.remove();
   }, [isBottomSheetOpen]);
   const handleBottomSheetIntroInfoOpen = useCallback(() => {
-    handleBottomSheetClose();
-    setIsBottomSheetOpen(true);
+    setIsBottomSheetOpenIntroInfoOpen(true)
     bottomSheetIntroInfoRef.current.snapToIndex(0);
   }, []);
 
   const handleBottomSheetIntroInfoClose = useCallback(() => {
-    setIsBottomSheetOpen(false);
+    setIsBottomSheetOpenIntroInfoOpen(false)
     bottomSheetIntroInfoRef.current.close();
   }, []);
 
   const handleBottomSheetOpen = useCallback(() => {
-    handleBottomSheetIntroInfoClose();
     setIsBottomSheetOpen(true);
     bottomSheetRef.current.snapToIndex(0);
   }, []);
@@ -200,19 +204,21 @@ const Test = () => {
     >
       <GestureHandlerRootView style={styles.container}>
         <StatusBar
-        barStyle={Appearance.getColorScheme()}
+        barStyle={theme === 'dark' ? 'light-content' : 'dark-content'}
           style={{
             paddingTop: Platform.OS === "android" ? StatusBarManager.HEIGHT : 0,
           }}
           backgroundColor={colors.schemes[theme].surface}
         />
-        <TopBarForText
+       
+          <PaperProvider>
+          <TopBarForText
           isOnTop={isOnTop}
           functionTitle={setDocSetId}
           functionParamText={handleBottomSheetOpen}
+          setIsOnTop={setIsOnTop}
           functionInfo={handleBottomSheetIntroInfoOpen}
         >
-          <PaperProvider>
             <ReadingScreenAllBook
               setIsOnTop={setIsOnTop}
               documentResult={documentResult}
@@ -230,7 +236,10 @@ const Test = () => {
               visible={isModalVisible}
               docSetId={docSetId}
             />
+                    </TopBarForText>
+
           </PaperProvider>
+          
           <BottomBar
             currentBook={currentBook}
             currentChap={currentChap}
@@ -243,12 +252,19 @@ const Test = () => {
             isLastOfLastBook={isLastOfLastBook}
             setIsModalVisible={setIsModalVisible}
           />
-        </TopBarForText>
 
         {isBottomSheetOpen && (
           <TouchableWithoutFeedback
             onPress={() => {
               handleBottomSheetClose();
+            }}
+          >
+            <View style={styles.overlay} />
+          </TouchableWithoutFeedback>
+        )}
+         {isBottomSheetIntroInfoOpen && (
+          <TouchableWithoutFeedback
+            onPress={() => {
               handleBottomSheetIntroInfoClose();
             }}
           >
@@ -287,7 +303,9 @@ const Test = () => {
           handleIndicatorStyle={styles.handlerStyle}
           backgroundStyle={styles.bottomSheet}
         >
-          <BottomSheetIntroInfo docSetId={docSetId} />
+          <BottomSheetIntroInfo 
+          shown={isBottomSheetIntroInfoOpen}
+          docSetId={docSetId} />
         </BottomSheet>
       </GestureHandlerRootView>
     </SafeAreaView>

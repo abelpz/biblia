@@ -4,6 +4,9 @@ import { Text } from "react-native-paper";
 import { ProskommaProvider } from "../context/proskommaContext";
 import { I18nProvider } from "../context/i18nContext";
 import { ColorThemeProvider } from "../context/colorThemeContext";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect, useLayoutEffect } from "react";
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   return (
@@ -15,7 +18,7 @@ export default function RootLayout() {
               name="index"
               options={{
                 headerTitleAlign: "center",
-                headerShown:false,
+                headerShown: false,
                 headerTitle: () => (
                   <View
                     style={{

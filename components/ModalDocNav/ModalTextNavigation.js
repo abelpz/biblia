@@ -80,7 +80,7 @@ export default function ModalTextNavigation({
       <Modal
         onDismiss={() => setVisible(false)}
         visible={visible}
-        style={{ marginTop: 0 }}
+        
         contentContainerStyle={[
           styles.container,
           { backgroundColor: colors.schemes[theme].surfaceContainerHigh },
@@ -148,11 +148,12 @@ export default function ModalTextNavigation({
                           ]
                         : [styles.chipContainer]
                     }
-                    onPress={() =>
+                    onPress={() => {
                       setBook(
                         e.headers.filter((p) => p.key === "bookCode")[0].value
-                      )
-                    }
+                      );
+                      setChapter(1);
+                    }}
                     key={id}
                   >
                     <View>
@@ -184,8 +185,9 @@ export default function ModalTextNavigation({
               ]}
             />
             <View style={styles.column}>
-              <ScrollView ref={chapterScroll}
-              showsHorizontalScrollIndicator={true}
+              <ScrollView
+                ref={chapterScroll}
+                showsHorizontalScrollIndicator={true}
               >
                 {data
                   ?.find(
@@ -266,9 +268,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     paddingBottom: 24,
-    marginHorizontal: 18,
-    marginVertical: 4,
-    margin: 0,
+    margin: 24,
+
     borderRadius: 28,
   },
   title: {

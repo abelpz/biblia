@@ -3,21 +3,26 @@ import { ActivityIndicator, Text } from "react-native-paper";
 import { useContext } from "react";
 import { ColorThemeContext } from "../context/colorThemeContext";
 export default function SplashScreenXenizo() {
-  const { colors, theme } = useContext(ColorThemeContext);
+  const { colors } = useContext(ColorThemeContext);
+  const theme = "dark";
   return (
     <View
       style={{
         height: "100%",
-        backgroundColor: "rgba(223, 224, 255, 1)",
+        backgroundColor: colors.schemes[theme].themeApp,
         justifyContent: "center",
         alignItems: "center",
-        gap:31,
+        gap: 31,
       }}
     >
       <Image
-        source={require("../assets/icons/SplashScreen/Icon2.png")}
+        source={
+          theme === "light"
+            ? require("../assets/icons/SplashScreen/Icon2.png")
+            : require("../assets/icons/SplashScreen/Icon2Dark.png")
+        }
       />
-      <ActivityIndicator size={'large'}/>
+      <ActivityIndicator size={"large"} />
     </View>
   );
 }
