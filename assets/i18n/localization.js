@@ -18,6 +18,25 @@ const translations = {
         chapter:"Chapter",
         book:'Book',
     },
+    es : {
+        greeting: "Hola",
+        textOptionGreeting: "Opciones de formato de texto",
+        about:'Acerca de',
+        introductionBook:'Introducción del libro',
+        language:'Idioma',
+        edition:'Edición',
+        year:'Año',
+        copyright:'Derechos de autor',
+        noIntro: " ",
+        style : "Estilo",
+        size : "Tamaño",
+        formatBible:"Biblia en formato",
+        formatBibleVerse:"Biblia por versículo",
+        navigateTo:"Navegar a",
+        verse:"Versículo",
+        chapter:"Capítulo",
+        book:'Libro',
+    },
     fr : {
         greeting: "Bonjour",
         textOptionGreeting: "Options de mise en forme",
@@ -36,12 +55,6 @@ const translations = {
         verse:"Verset",
         chapter:"Chapitre",
         book:'Livre',
-
-
-
-
-
-
     },
     de :{
         greeting: "Hallo",

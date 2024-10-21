@@ -20,6 +20,8 @@
     "expo-status-bar": "~1.12.1",
     "expo-system-ui": "~3.0.7",
     "i18n-js": "^4.4.3",
+    "jszip": "^3.10.1",
+    "jszip-utils": "^0.1.0",
     "proskomma-core": "^0.10.9",
     "proskomma-json-tools": "^0.8.16",
     "react": "18.2.0",
@@ -37,7 +39,11 @@
     "react-native-select-dropdown": "^4.0.1",
     "react-native-svg": "15.2.0",
     "react-native-svg-transformer": "^1.4.0",
-    "react-paper": "^0.0.2"
+    "react-paper": "^0.0.2",
+    "yaml": "^2.6.0",
+    "expo-file-system": "~17.0.1",
+    "typescript": "~5.3.3",
+    "@types/react": "~18.2.79"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

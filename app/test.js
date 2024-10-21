@@ -52,10 +52,10 @@ const Test = () => {
   const [currentChap, setCurrentChap] = useState(1);
   const [fontSize, setFontSize] = useState(2);
   const [documentResult, setDocResults] = useState(null);
-  const [currentBook, setCurrentBook] = useState("MRK");
+  const [currentBook, setCurrentBook] = useState("TIT");
   const [fontFamily, setFontFamily] = useState("NotoSans");
   const [bibleFormat, setBibleFormat] = useState("format");
-  const [docSetId, setDocSetId] = useState("xenizo_psle_1");
+  const [docSetId, setDocSetId] = useState("door43_tji_1");
   const [isFirstOfFirstBook, setIsFirstOfFirstBook] = useState(false);
   const [isLastOfLastBook, setIsLastOfLastBook] = useState(false);
 

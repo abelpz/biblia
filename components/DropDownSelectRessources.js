@@ -168,13 +168,16 @@ function createDataArray(pk) {
     {
       docSets {
         tags
-        id
+        id,
+        nDocuments
       }
     }
   `);
 
-  return response.data.docSets.map((e) => ({
-    label: e.tags[0].split(":")[1],
+  return response.data.docSets.map((e) => {
+    const titleTag = e.tags.find((tag) => tag.startsWith("title"));
+    return ({
+    label: titleTag ? titleTag.split(":")[1] : "unknown",
     value: e.id,
-  }));
+  })});
 }
