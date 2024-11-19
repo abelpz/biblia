@@ -6,7 +6,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { ProskommaContext } from "../context/proskommaContext";
 import { I18nContext } from "../context/i18nContext";
 import SplashScreenXenizo from "../components/SplashScreen";
-import { BIBLE_DATA } from "../constants";
+import { BIBLE_DATA } from "../constants/index.js";
 
 SplashScreen.preventAutoHideAsync();
 

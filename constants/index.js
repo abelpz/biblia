@@ -1,12 +1,18 @@
-export const BIBLE_DATA = {
+// Change this to the bible you want to use from Door43 and then run `npm run build` in the terminal
+const BIBLE_DATA = {
   owner: "idiomaspuentes",
   languageCode: "xsu",
   bibleId: "tji"
 };
 
-export const DEFAULT_LANGUAGE = "en";
-export const SERVER_URL = "https://git.door43.org";
-export const API_VERSION = "v1";
-export const API_BASE_URL = `${SERVER_URL}/${API_VERSION}`;
+// Door43 API
+const SERVER_URL = "https://git.door43.org";
+const API_VERSION = "v1";
+const API_BASE_URL = `${SERVER_URL}/api/${API_VERSION}`;
 
-export const DOOR43_BIBLE_ZIP_PATH = "/bible/bible_succinct.zip";
+module.exports = {
+  BIBLE_DATA,
+  SERVER_URL,
+  API_VERSION,
+  API_BASE_URL
+};

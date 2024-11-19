@@ -1,12 +1,15 @@
 {
-  "name": "Sunteleo",
+  "name": "sunteleo",
   "version": "0.0.1",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "bundle": "node scripts/bundle_bible.js",
+    "release:android": "npx expo run:android --variant=release --no-bundler",
+    "build:android": "npm run bundle && npm run release:android"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.6.3",

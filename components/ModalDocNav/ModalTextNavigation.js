@@ -322,6 +322,8 @@ async function getData(pk, docSetId) {
     }
   }`).data?.docSet?.documents;
 
+  console.log({ documents });
+
   // Filter out 'GLO' and 'FRT' books
   const filteredDocuments = documents.filter((doc) => {
     const bookCode = doc.headers.find(

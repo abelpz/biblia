@@ -1,14 +1,15 @@
-import JSZip from "jszip";
-import { parse } from "yaml";
+const JSZip = require("jszip");
+const { parse } = require("yaml");
+const { API_BASE_URL } = require("../constants/index.js");
 
-export const forEachBookInBible = async ({ bibleData, onBook, onReleaseMetadata }) => {
+const forEachBookInBible = async ({ bibleData, onBook, onReleaseMetadata }) => {
   console.log("Loading Bible from internet");
   try {
     const { latestRelease, latestVersion, releaseDate, ...data } = await getBibleMetadata(bibleData);
     const bibleFiles = await getBibleFiles(latestRelease.zipball_url);
     
     await Promise.all([
-      onReleaseMetadata({ ...data, version: latestVersion, date: releaseDate }),
+      onReleaseMetadata({ ...data, identifier: bibleData.bibleId, version: latestVersion, date: releaseDate }),
       processBookFiles(bibleFiles, { onBook, releaseDate, latestVersion })
     ]);
 
@@ -50,10 +51,10 @@ const processBookFiles = async (bibleFiles, { onBook, releaseDate, latestVersion
   await Promise.all(bookPromises);
 };
 
-export const getLatestRelease = async ({owner, repoName}) => {
+const getLatestRelease = async ({owner, repoName}) => {
   try {
     const response = await fetch(
-      `https://git.door43.org/api/v1/repos/${owner}/${repoName}/releases/latest`
+      `${API_BASE_URL}/repos/${owner}/${repoName}/releases/latest`
     );
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -65,16 +66,16 @@ export const getLatestRelease = async ({owner, repoName}) => {
   }
 };
 
-export const getLatestBibleRelease = async ({owner, languageCode, bibleId}) => {
+const getLatestBibleRelease = async ({owner, languageCode, bibleId}) => {
   const release = await getLatestRelease({ owner, repoName: languageCode + "_" + bibleId });
-  if (release?.door43_metadata?.subject === "Bible") {
+  if (["Aligned Bible", "Bible"].includes(release?.door43_metadata?.subject)) {
     return release;
   }
   console.error(release);
   throw new Error("Not a Bible release.");
 }
-
-export const getDataFromTag = async (owner, repoName, tagName) => {
+ 
+const getDataFromTag = async (owner, repoName, tagName) => {
   const tagManifest = await (
     await fetch(
       `https://git.door43.org/api/v1/repos/${owner}/${repoName}/raw/manifest.yaml?ref=${tagName}`
@@ -120,4 +121,10 @@ const getZipFiles = async (url) => {
   }
 };
 
-// Remove or comment out this section if it's just for testing
+module.exports = {
+  forEachBookInBible,
+  getLatestRelease,
+  getLatestBibleRelease,
+  getDataFromTag,
+  getZipFiles
+};

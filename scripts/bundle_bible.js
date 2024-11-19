@@ -1,12 +1,13 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { forEachBookInBible } from './get_bible.mjs';
-import { BIBLE_DATA } from '../constants';
+const fs = require('fs/promises');
+const path = require('path');
+const { forEachBookInBible } = require('./get_bible.js');
+const { BIBLE_DATA } = require('../constants/index.js');
 
 const OUTPUT_DIR = './assets/bible';
 
 const preBundleBible = async (bibleData) => {
-  // Ensure the output directory exists
+  // Ensure the output directory exists, remove it if it exists, and create a new one
+  await fs.rm(OUTPUT_DIR, { recursive: true, force: true });
   await fs.mkdir(OUTPUT_DIR, { recursive: true });
 
   await forEachBookInBible({
